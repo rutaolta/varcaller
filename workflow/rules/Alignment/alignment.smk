@@ -6,14 +6,16 @@ rule bwa_index:
         ann=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".ann"),
         bwt=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".bwt"),
         pac=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".pac"),
-        sa=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".sa")
-    params:
-        prefix=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"]),
+        sa=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".sa"),
         assembly=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"])
+    params:
+        prefix=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"])
     log:
         bwa_index_log=log_dir_path / (config["sample"] + ".bwa_index.log"),
         cluster_log=cluster_log_dir_path / (config["sample"] + ".bwa_map.cluster.log"),
         cluster_err=cluster_log_dir_path / (config["sample"] + ".bwa_map.cluster.err")
+    benchmark:
+        benchmark_dir_path / config["sample"] / "bwa_index.benchmark.txt"
     conda:
        "../envs/conda.yaml"
     resources:
@@ -24,13 +26,13 @@ rule bwa_index:
         config["bwa_index_threads"]
     shell:
         "gunzip -k {input.assembly}; "
-        "bwa index {params.assembly} -p {params.prefix} 2>{log.bwa_index_log}"
+        "bwa index {output.assembly} -p {params.prefix} 2>{log.bwa_index_log}"
 
 rule bwa_map:
     input:
         forward_reads=reads_dir_path / ("{sample}_1." + config["reads_ext"] + ".gz"),
         reverse_reads=reads_dir_path / ("{sample}_2." + config["reads_ext"] + ".gz"),
-        assembly=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"]),
+        assembly=rules.bwa_index.output.assembly,
         ann=rules.bwa_index.output.ann
     output:
         bam=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam")
@@ -44,6 +46,8 @@ rule bwa_map:
         samtools_markdup=log_dir_path / "{sample}/samtools_markdup.log",
         cluster_log=cluster_log_dir_path / "{sample}.bwa_map.cluster.log",
         cluster_err=cluster_log_dir_path / "{sample}.bwa_map.cluster.err"
+    benchmark:
+        benchmark_dir_path / "{sample}/bwa_map.benchmark.txt"
     conda:
        "../envs/conda.yaml"
     resources:
@@ -64,11 +68,13 @@ rule index_bam:
     input:
         rules.bwa_map.output.bam
     output:
-        out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai"
+        bai=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai")
     log:
         std=log_dir_path / "{sample}/index_bam.log",
         cluster_log=cluster_log_dir_path / "{sample}.index_bam.cluster.log",
         cluster_err=cluster_log_dir_path / "{sample}.index_bam.cluster.err"
+    benchmark:
+        benchmark_dir_path / "{sample}/index_bam.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:

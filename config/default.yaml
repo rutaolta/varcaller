@@ -12,12 +12,14 @@ scripts_dir: "workflow/scripts"
 # log dirs
 log_dir: "logs"
 cluster_log_dir: "cluster_logs"
+benchmark_dir: "benchmarks"
 
 # config
 conda_config: "workflow/envs/conda.yaml"
 
 # parameters
-sample: "cerevisiae"
+sample: "cerevisiae" # reference assembly
+min_mapping_quality: 20
 
 #---- Extensions ----
 assemblies_ext: "fasta"
@@ -27,14 +29,19 @@ reads_ext: "fastq"
 bwa_index_threads: 20
 bwa_map_threads: 20
 index_bam_threads: 10
+mosdepth_threads: 10
 
 #---- Time ----
 bwa_index_time: "12:00:00"
 bwa_map_time: "24:00:00"
 index_bam_time: "12:00:00"
+mosdepth_time: "12:00:00"
 
 #---- Memory ----
+# suppl
+bwa_map_per_thread_mem_mb: 1
+# rules
 bwa_index_mem_mb: 30000
 bwa_map_mem_mb: 30000
-bwa_map_per_thread_mem_mb: 10
 index_bam_mem_mb: 10000
+mosdepth_mem_mb: 4000

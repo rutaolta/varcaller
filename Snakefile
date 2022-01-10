@@ -18,6 +18,7 @@ scripts_dir_path = str(config["scripts_dir"])
 # log dirs
 log_dir_path = Path(config["log_dir"])
 cluster_log_dir_path = Path(config["cluster_log_dir"])
+benchmark_dir_path = Path(config["benchmark_dir"])
 
 # def get_scaffolds(mypath):
 #     _, _, filenames = next(walk(mypath))
@@ -26,11 +27,12 @@ cluster_log_dir_path = Path(config["cluster_log_dir"])
 # SAMPLES = get_scaffolds(reads_dir_path)
 
 #### load rules #####
-include: "workflow/rules/alignment.smk"
+include: "workflow/rules/Alignment/alignment.smk"
+include: "workflow/rules/Alignment/coverage.smk"
 
 ##### target rules #####
 localrules: all
 
 rule all:
     input:
-        expand(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai", sample=config["sample"])
+        expand(out_alignment_dir_path / "{sample}/{sample}.coverage.per-base.bed.gz", sample=config["sample"])
