@@ -37,13 +37,15 @@ Extensions of assembly and reads can be changed in `config/default.yaml` in "Ext
 
 The name of file with reference assembly should be defined in `config/default.yaml` in "Parameters" section:
 
-    - `reads: ["filename without suffixyour desired reads "]`
+    - `reads: ["name of your desired reads"]`
 
-Actually this is the common part of filename of fasta containing forward and reverse reads. Filename should be without extension. Suffix of filename with foward read should be "_1" and with reverse "_2". For example, `cerevisiae_1.fq.gz`
+Actually this is the common part of filenames containing forward and reverse reads. Filename should be without extensions. For example, if desired reads are `cerevisiae_1.fq.gz` and `cerevisiae_2.fq.gz` then the setting would be like `reads: ["cerevisiae"]`.
+
+Suffix of filename with foward read should be "_1" and with reverse "_2". For example, `cerevisiae_1.fq.gz`
 
     - `assembly: ["name of your desired assembly"]`
 
-Actually this is the filename of fasta containing assembly. Filename should be without extension.
+Actually this is the name of files containing assembly. Filename should be without extensions. For example, if desired assembly is `s.cerevisiae.fasta.gz` then the setting would be like `assembly: "s.cerevisiae"`.
 
 The mapping quality for mosdepth can be changed in `config/default.yaml` in "Parameters" section:
 
