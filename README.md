@@ -1,7 +1,7 @@
 # About
 
-Pipeline gets assembly in fasta format, and reads in fq format as default (can be changed in config/default.yaml). 
-As an output it generates ... .
+Pipeline gets assembly in fasta format, and reads in fq format as default (can be changed in `config/default.yaml`). 
+As an output it generates ... (pipeline is in progress).
 
 All general results you can find in `data_output` folder.
 
@@ -11,7 +11,7 @@ All general results you can find in `data_output` folder.
 
 `cd <pipeline_working_dir>`
 
-It is recommended to create a fresh conda environment using mamba or conda.
+It is recommended to create a fresh conda environment using `mamba` or `conda`.
 
 ```
 mamba env create --name reseqpipe --file ./environment.yaml
