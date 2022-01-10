@@ -30,11 +30,15 @@ Activate conda environment with snakemake:
 # Required settings
 
 Extensions of assembly and reads can be changed in `config/default.yaml` in "Extensions" section:
+
     - `assemblies_ext: "your desired extension"`
+    
     - `reads_ext: "your desired extension"`
 
 The name of file with reference assembly should be defined in `config/default.yaml` in "Parameters" section:
+
     - `sample: "your desired reference"`
 
 The mapping quality for mosdepth can be changed in `config/default.yaml` in "Parameters" section:
+
     - `min_mapping_quality: your_desired_quality_integer` (20 as default)
