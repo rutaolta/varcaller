@@ -26,6 +26,8 @@ benchmark_dir_path = Path(config["benchmark_dir"])
 
 # SAMPLES = get_scaffolds(reads_dir_path)
 
+SAMPLES=config["sample"]
+
 #### load rules #####
 include: "workflow/rules/Alignment/alignment.smk"
 include: "workflow/rules/Alignment/coverage.smk"
@@ -35,4 +37,4 @@ localrules: all
 
 rule all:
     input:
-        expand(out_alignment_dir_path / "{sample}/{sample}.coverage.per-base.bed.gz", sample=config["sample"])
+        expand(out_alignment_dir_path / "{sample}/{sample}.coverage.per-base.bed.gz", sample=SAMPLES)
