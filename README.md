@@ -37,7 +37,13 @@ Extensions of assembly and reads can be changed in `config/default.yaml` in "Ext
 
 The name of file with reference assembly should be defined in `config/default.yaml` in "Parameters" section:
 
-    - `sample: "your desired reference"`
+    - `reads: ["filename without suffixyour desired reads "]`
+
+    Actually this is the common part of filename of fasta containing forward and reverse reads. Filename should be without extension. Suffix of filename with foward read should be "_1" and with reverse "_2"
+
+    - `assembly: ["name of your desired assembly"]`
+
+    Actually this is the filename of fasta containing assembly. Filename should be without extension.
 
 The mapping quality for mosdepth can be changed in `config/default.yaml` in "Parameters" section:
 

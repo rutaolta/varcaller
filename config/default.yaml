@@ -18,7 +18,8 @@ benchmark_dir: "benchmarks"
 conda_config: "workflow/envs/conda.yaml"
 
 # parameters
-sample: "cerevisiae" # reference assembly
+reads: ["cerevisiae"] # name of files with reads without suffixes (names should end by _1 for forward, _2 for reverse)
+assembly: "s.cerevisiae" # name of file with assembly
 min_mapping_quality: 20
 
 #---- Extensions ----

@@ -1,21 +1,21 @@
 rule bwa_index:
     input:
-        assembly=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".gz")
+        assembly=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".gz")
     output:
-        amb=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".amb"),
-        ann=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".ann"),
-        bwt=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".bwt"),
-        pac=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".pac"),
-        sa=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"] + ".sa"),
-        assembly=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"])
+        amb=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".amb")),
+        ann=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".ann")),
+        bwt=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".bwt")),
+        pac=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".pac")),
+        sa=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".sa")),
+        assembly=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"]))
     params:
-        prefix=assemblies_dir_path / (config["sample"] + "." + config["assemblies_ext"])
+        prefix=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"])
     log:
-        bwa_index_log=log_dir_path / (config["sample"] + ".bwa_index.log"),
-        cluster_log=cluster_log_dir_path / (config["sample"] + ".bwa_map.cluster.log"),
-        cluster_err=cluster_log_dir_path / (config["sample"] + ".bwa_map.cluster.err")
+        bwa_index_log=log_dir_path / (config["assembly"] + ".bwa_index.log"),
+        cluster_log=cluster_log_dir_path / (config["assembly"] + ".bwa_map.cluster.log"),
+        cluster_err=cluster_log_dir_path / (config["assembly"] + ".bwa_map.cluster.err")
     benchmark:
-        benchmark_dir_path / config["sample"] / "bwa_index.benchmark.txt"
+        benchmark_dir_path / config["assembly"] / "bwa_index.benchmark.txt"
     conda:
        "../envs/conda.yaml"
     resources:
@@ -33,12 +33,16 @@ rule bwa_map:
         forward_reads=reads_dir_path / ("{sample}_1." + config["reads_ext"] + ".gz"),
         reverse_reads=reads_dir_path / ("{sample}_2." + config["reads_ext"] + ".gz"),
         assembly=rules.bwa_index.output.assembly,
-        ann=rules.bwa_index.output.ann
+        amb=rules.bwa_index.output.amb,
+        ann=rules.bwa_index.output.ann,
+        bwt=rules.bwa_index.output.bwt,
+        pac=rules.bwa_index.output.pac,
+        sa=rules.bwa_index.output.sa
     output:
         bam=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam")
     params:
         per_thread_sort_mem="%sG" % config["bwa_map_per_thread_mem_mb"],
-        prefix=out_alignment_dir_path / "{sample_id}/{sample_id}"
+        prefix=out_alignment_dir_path / "{sample}/{sample}"
     log:
         bwa_mem=log_dir_path / "{sample}/bwa_mem.log",
         samtools_fixmate=log_dir_path / "{sample}/samtools_fixmate.log",
