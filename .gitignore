@@ -1,0 +1,21 @@
+data_input/assemblies/cerevisiae (copy).fasta.gz
+data_input/assemblies/cerevisiae.fasta
+data_input/assemblies/cerevisiae.fasta.amb
+data_input/assemblies/cerevisiae.fasta.ann
+data_input/assemblies/cerevisiae.fasta.bwt
+data_input/assemblies/cerevisiae.fasta.gz
+data_input/assemblies/cerevisiae.fasta.pac
+data_input/assemblies/cerevisiae.fasta.sa
+data_input/reads/cerevisiae_1.fastq.gz
+data_input/reads/cerevisiae_2.fastq.gz
+data_output/alignment/cerevisiae/cerevisiae.sorted.mkdup.bam.bai
+logs/cerevisiae.bwa_index.log
+logs/cerevisiae/bwa_mem.log
+logs/cerevisiae/index_bam.log
+logs/cerevisiae/samtools_fixmate.log
+logs/cerevisiae/samtools_markdup.log
+logs/cerevisiae/samtools_sort.log
+cluster_logs/cerevisiae.bwa_map.cluster.err
+cluster_logs/cerevisiae.bwa_map.cluster.log
+cluster_logs/cerevisiae.index_bam.cluster.err
+cluster_logs/cerevisiae.index_bam.cluster.log

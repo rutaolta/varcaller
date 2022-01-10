@@ -1,0 +1,40 @@
+#---- Dirs ----
+# input dirs
+assemblies_dir: "data_input/assemblies" #"/mnt/archive/lgd_data/Mammals/pinnipeds/pusa_sibirica/genome/denovo/assemblies/hic_0.1/"
+reads_dir: "data_input/reads" #"/mnt/archive/lgd_data/Mammals/pinnipeds/pusa_sibirica/genome/denovo/reads/raw/pe/female/"
+
+# output dirs
+out_alignment_dir: "data_output/alignment"
+
+# technical dirs
+scripts_dir: "workflow/scripts"
+
+# log dirs
+log_dir: "logs"
+cluster_log_dir: "cluster_logs"
+
+# config
+conda_config: "workflow/envs/conda.yaml"
+
+# parameters
+sample: "cerevisiae"
+
+#---- Extensions ----
+assemblies_ext: "fasta"
+reads_ext: "fastq"
+
+#---- Threads ----
+bwa_index_threads: 20
+bwa_map_threads: 20
+index_bam_threads: 10
+
+#---- Time ----
+bwa_index_time: "12:00:00"
+bwa_map_time: "24:00:00"
+index_bam_time: "12:00:00"
+
+#---- Memory ----
+bwa_index_mem_mb: 30000
+bwa_map_mem_mb: 30000
+bwa_map_per_thread_mem_mb: 10
+index_bam_mem_mb: 10000

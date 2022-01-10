@@ -1,0 +1,9 @@
+#---- Bioconda config ----
+name: reseqpipe
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - pigz
+  - bwa=0.7.17
+  - samtools=1.14
