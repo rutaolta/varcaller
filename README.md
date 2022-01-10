@@ -1,8 +1,9 @@
 # About
 
-Pipeline gets assembly in fasta format, and reads in fq format. As an output it generates ... .
+Pipeline gets assembly in fasta format, and reads in fq format as default (can be changed in config/default.yaml). 
+As an output it generates ... .
 
-The ... you can find on the resulting plot in `data_output` folder.
+All general results you can find in `data_output` folder.
 
 # Configure Pipeline
 
