@@ -14,7 +14,7 @@ rule mosdepth:
     benchmark:
          benchmark_dir_path / "{sample}/mosdepth.benchmark.txt"
     conda:
-        "../../../%s" % config["conda_config"]
+        "../../envs/conda.yaml"
     resources:
         cpus=config["mosdepth_threads"],
         time=config["mosdepth_time"],

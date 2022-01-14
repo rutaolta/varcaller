@@ -6,5 +6,5 @@ channels:
 dependencies:
   - pigz
   - bwa=0.7.17
-  - samtools=1.14
-  - mosdepth=0.3.2
+  - samtools>=1.10
+  - mosdepth>=0.3.1

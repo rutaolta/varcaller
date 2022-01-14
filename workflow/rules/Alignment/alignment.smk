@@ -17,7 +17,7 @@ rule bwa_index:
     benchmark:
         benchmark_dir_path / config["assembly"] / "bwa_index.benchmark.txt"
     conda:
-       "../envs/conda.yaml"
+       "../../envs/conda.yaml"
     resources:
         cpus=config["bwa_index_threads"],
         time=config["bwa_index_time"],
@@ -41,8 +41,12 @@ rule bwa_map:
     output:
         bam=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam")
     params:
+        bwa_threads=config["bwa_mem_threads"],
+        fixmate_threads=config["samtools_fixmate_threads"],
+        sort_threads=config["samtools_sort_threads"],
+        markdup_threads=config["samtools_markdup_threads"],
         per_thread_sort_mem="%sG" % config["bwa_map_per_thread_mem_mb"],
-        prefix=out_alignment_dir_path / "{sample}/{sample}"
+        prefix=expand(out_alignment_dir_path / "{sample}/{sample}", sample=SAMPLES)
     log:
         bwa_mem=log_dir_path / "{sample}/bwa_mem.log",
         samtools_fixmate=log_dir_path / "{sample}/samtools_fixmate.log",
@@ -53,19 +57,19 @@ rule bwa_map:
     benchmark:
         benchmark_dir_path / "{sample}/bwa_map.benchmark.txt"
     conda:
-       "../envs/conda.yaml"
+       "../../envs/conda.yaml"
     resources:
-        cpus=config["bwa_map_threads"],
+        cpus=config["bwa_mem_threads"] + config["samtools_fixmate_threads"] + config["samtools_sort_threads"] + config["samtools_markdup_threads"] + 1,
         time=config["bwa_map_time"],
-        mem=config["bwa_map_mem_mb"]
+        mem=config["bwa_mem_mem_mb"] + config["samtools_fixmate_mem_mb"] + config["bwa_map_per_thread_mem_mb"] * config["samtools_sort_threads"] * 1024 + config["samtools_markdup_mem_mb"]
     threads:
-        config["bwa_map_threads"]
+        config["bwa_mem_threads"] + config["samtools_fixmate_threads"] + config["samtools_sort_threads"] + config["samtools_markdup_threads"]
     shell:
-        "bwa mem -t {threads} {input.assembly} <(zcat -c {input.forward_reads}) <(zcat -c {input.reverse_reads}) "
+        "bwa mem -t {params.bwa_threads} {input.assembly} <(zcat -c {input.forward_reads}) <(zcat -c {input.reverse_reads}) "
         "-R  \'@RG\\tID:{wildcards.sample}\\tPU:x\\tSM:{wildcards.sample}\\tPL:Illumina\\tLB:x\' 2>{log.bwa_mem} | "
-        "samtools fixmate -@ {threads} -m - -  2>{log.samtools_fixmate} | "
-        "samtools sort -T {params.prefix} -@ {threads} -m {params.per_thread_sort_mem} 2>{log.samtools_sort} | "
-        "samtools markdup -@ {threads} - {output.bam} 2>{log.samtools_markdup} "
+        "samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.samtools_fixmate} | "
+        "samtools sort -T {params.prefix} -@ {params.sort_threads} -m {params.per_thread_sort_mem} 2>{log.samtools_sort} | "
+        "samtools markdup -@ {params.markdup_threads} - {output.bam} 2>{log.samtools_markdup} "
         "rm {input.assembly}"
 
 rule index_bam:
@@ -80,7 +84,7 @@ rule index_bam:
     benchmark:
         benchmark_dir_path / "{sample}/index_bam.benchmark.txt"
     conda:
-        "../../../%s" % config["conda_config"]
+        "../../envs/conda.yaml"
     resources:
         cpus=config["index_bam_threads"],
         time=config["index_bam_time"],

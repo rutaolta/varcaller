@@ -1,7 +1,7 @@
 #---- Dirs ----
 # input dirs
-assemblies_dir: "data_input/assemblies" #"/mnt/archive/lgd_data/Mammals/pinnipeds/pusa_sibirica/genome/denovo/assemblies/hic_0.1/"
-reads_dir: "data_input/reads" #"/mnt/archive/lgd_data/Mammals/pinnipeds/pusa_sibirica/genome/denovo/reads/raw/pe/female/"
+assemblies_dir: "data_input/assemblies/"
+reads_dir: "/mnt/tank/scratch/skliver/common/pinnipeds/pusa_sibirica/male/trimmomatic/"
 
 # output dirs
 out_alignment_dir: "data_output/alignment"
@@ -18,8 +18,8 @@ benchmark_dir: "benchmarks"
 conda_config: "workflow/envs/conda.yaml"
 
 # parameters
-reads: ["cerevisiae"] # name of files with reads without suffixes (names should end by _1 for forward, _2 for reverse)
-assembly: "s.cerevisiae" # name of file with assembly
+reads: ["male_paired_trimmed"] # name of files with reads without suffixes (names should end by _1 for forward, _2 for reverse)
+assembly: "draft_HiC" # name of file with assembly
 min_mapping_quality: 20
 
 #---- Extensions ----
@@ -27,22 +27,29 @@ assemblies_ext: "fasta"
 reads_ext: "fastq"
 
 #---- Threads ----
-bwa_index_threads: 20
-bwa_map_threads: 20
-index_bam_threads: 10
-mosdepth_threads: 10
+bwa_index_threads: 30
+bwa_map_threads: 30
+bwa_mem_threads: 19
+samtools_fixmate_threads: 1
+samtools_sort_threads: 5
+samtools_markdup_threads: 3
+index_bam_threads: 30
+mosdepth_threads: 16
 
 #---- Time ----
 bwa_index_time: "12:00:00"
-bwa_map_time: "24:00:00"
+bwa_map_time: "140:00:00"
 index_bam_time: "12:00:00"
 mosdepth_time: "12:00:00"
 
 #---- Memory ----
 # suppl
-bwa_map_per_thread_mem_mb: 1
+bwa_map_per_thread_mem_mb: 10
+# samtools_sort_threads: 5
 # rules
 bwa_index_mem_mb: 30000
-bwa_map_mem_mb: 30000
+bwa_mem_mem_mb: 50000
+samtools_fixmate_mem_mb: 20000
+samtools_markdup_mem_mb: 20000
 index_bam_mem_mb: 10000
-mosdepth_mem_mb: 4000
+mosdepth_mem_mb: 10000
