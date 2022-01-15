@@ -38,7 +38,7 @@ mosdepth_threads: 16
 
 #---- Time ----
 bwa_index_time: "12:00:00"
-bwa_map_time: "140:00:00"
+bwa_map_time: "24:00:00"
 index_bam_time: "12:00:00"
 mosdepth_time: "12:00:00"
 
