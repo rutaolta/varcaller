@@ -2,11 +2,11 @@ rule bwa_index:
     input:
         assembly=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".gz")
     output:
-        amb=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".amb")),
-        ann=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".ann")),
-        bwt=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".bwt")),
-        pac=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".pac")),
-        sa=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".sa")),
+        amb=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".amb"),
+        ann=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".ann"),
+        bwt=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".bwt"),
+        pac=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".pac"),
+        sa=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"] + ".sa"),
         assembly=temp(assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"]))
     params:
         prefix=assemblies_dir_path / (config["assembly"] + "." + config["assemblies_ext"])

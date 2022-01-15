@@ -31,7 +31,7 @@ bwa_index_threads: 30
 bwa_map_threads: 30
 bwa_mem_threads: 19
 samtools_fixmate_threads: 1
-samtools_sort_threads: 5
+samtools_sort_threads: 7
 samtools_markdup_threads: 3
 index_bam_threads: 30
 mosdepth_threads: 16
@@ -45,7 +45,6 @@ mosdepth_time: "12:00:00"
 #---- Memory ----
 # suppl
 bwa_map_per_thread_mem_mb: 10
-# samtools_sort_threads: 5
 # rules
 bwa_index_mem_mb: 30000
 bwa_mem_mem_mb: 50000
