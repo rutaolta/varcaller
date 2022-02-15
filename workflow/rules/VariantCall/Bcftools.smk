@@ -4,8 +4,8 @@ rule bcftools_varcall:
         samples=expand(out_alignment_dir_path / "{sample}/{sample}.clipped.bam", sample=config["reads"]),
         indexes=expand(out_alignment_dir_path / "{sample}/{sample}.clipped.bam.bai", sample=config["reads"])
     output:
-        mpileup=varcall_dir_path / config["assembly"] + ".mpileup.vcf.gz",
-        call=varcall_dir_path / config["assembly"] + ".vcf.gz"
+        mpileup=varcall_dir_path / (config["assembly"] + ".mpileup.vcf.gz"),
+        call=varcall_dir_path / (config["assembly"] + ".vcf.gz")
     params:
         adjustMQ=50,
         annotate_mpileup=config["bcftools_mpileup_annotate"],
@@ -14,12 +14,12 @@ rule bcftools_varcall:
         min_MQ=config["bcftools_mpileup_min_MQ"],
         min_BQ=config["bcftools_mpileup_min_BQ"]
     log:
-        mpileup=log_dir_path / config["assembly"] + ".bcftools_mpileup.log",
-        call=log_dir_path / config["assembly"] + ".bcftools_call.log",
-        cluster_log=cluster_log_dir_path / config["assembly"] + ".bcftools_varcall.cluster.log",
-        cluster_err=cluster_log_dir_path / config["assembly"] + ".bcftools_varcall.cluster.err"
+        mpileup=log_dir_path / (config["assembly"] + ".bcftools_mpileup.log"),
+        call=log_dir_path / (config["assembly"] + ".bcftools_call.log"),
+        cluster_log=cluster_log_dir_path / (config["assembly"] + ".bcftools_varcall.cluster.log"),
+        cluster_err=cluster_log_dir_path / (config["assembly"] + ".bcftools_varcall.cluster.err")
     benchmark:
-        benchmark_dir_path / config["assembly"] + ".bcftools_varcall.benchmark.txt"
+        benchmark_dir_path / (config["assembly"] + ".bcftools_varcall.benchmark.txt")
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -43,11 +43,11 @@ rule bcftools_filter:
         soft_filter=config["bcftools_filter_soft_filter"],
         exclude=config["bcftools_filter_exclude"],
     log:
-        std=log_dir_path / config["assembly"] + ".bcftools_filter.log",
-        cluster_log=cluster_log_dir_path / config["assembly"] + ".bcftools_filter.cluster.log",
-        cluster_err=cluster_log_dir_path / config["assembly"] + ".bcftools_filter.cluster.err"
+        std=log_dir_path / (config["assembly"] + ".bcftools_filter.log"),
+        cluster_log=cluster_log_dir_path / (config["assembly"] + ".bcftools_filter.cluster.log"),
+        cluster_err=cluster_log_dir_path / (config["assembly"] + ".bcftools_filter.cluster.err")
     benchmark:
-        benchmark_dir_path / config["assembly"] + ".bcftools_filter.benchmark.txt"
+        benchmark_dir_path / (config["assembly"] + ".bcftools_filter.benchmark.txt")
     conda:
         "../../../%s" % config["conda_config"]
     resources:
