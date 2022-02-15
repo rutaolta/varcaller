@@ -26,6 +26,8 @@ benchmark_dir_path = Path(config["benchmark_dir"])
 
 # SAMPLES = get_scaffolds(reads_dir_path)
 
+if "reads" not in config: # for parse samples IDs from directory
+    config["reads"] = [d.name for d in reads_dir_path.iterdir() if d.is_dir()]
 SAMPLES=config["reads"]
 
 #### load rules #####
