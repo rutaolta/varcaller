@@ -46,7 +46,7 @@ rule bwa_map:
         sort_threads=config["samtools_sort_threads"],
         markdup_threads=config["samtools_markdup_threads"],
         per_thread_sort_mem="%sG" % config["bwa_map_per_thread_mem_mb"],
-        prefix=expand(out_alignment_dir_path / "{sample}/{sample}", sample=SAMPLES)
+        prefix=expand(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup", sample=SAMPLES)
     log:
         bwa_mem=log_dir_path / "{sample}/bwa_mem.log",
         samtools_fixmate=log_dir_path / "{sample}/samtools_fixmate.log",
