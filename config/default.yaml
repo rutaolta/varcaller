@@ -43,12 +43,14 @@ samtools_sort_threads: 7
 samtools_markdup_threads: 3
 index_bam_threads: 30
 mosdepth_threads: 16
+bcftools_varcall_threads: 32
 
 #---- Time ----
 bwa_index_time: "12:00:00"
 bwa_map_time: "24:00:00"
 index_bam_time: "12:00:00"
 mosdepth_time: "12:00:00"
+bcftools_varcall_time: "100:00:00"
 
 #---- Memory ----
 # suppl
@@ -60,3 +62,4 @@ samtools_fixmate_mem_mb: 20000
 samtools_markdup_mem_mb: 20000
 index_bam_mem_mb: 10000
 mosdepth_mem_mb: 10000
+bcftools_varcall_mem_mb: 100000

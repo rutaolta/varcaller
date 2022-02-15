@@ -16,18 +16,18 @@ rule bcftools_varcall:
     log:
         mpileup=log_dir_path / config["assembly"] + ".bcftools_mpileup.log",
         call=log_dir_path / config["assembly"] + ".bcftools_call.log",
-        cluster_log=cluster_log_dir_path / config["assembly"] + ".bcftools_mpileup.cluster.log",
-        cluster_err=cluster_log_dir_path / config["assembly"] + ".bcftools_mpileup.cluster.err"
+        cluster_log=cluster_log_dir_path / config["assembly"] + ".bcftools_varcall.cluster.log",
+        cluster_err=cluster_log_dir_path / config["assembly"] + ".bcftools_varcall.cluster.err"
     benchmark:
-        benchmark_dir_path / config["assembly"] + ".bcftools_mpileup.benchmark.txt"
+        benchmark_dir_path / config["assembly"] + ".bcftools_varcall.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
-        cpus=config["bcftools_mpileup_threads"],
-        mem=config["bcftools_mpileup_mem_mb"],
-        time=config["bcftools_mpileup_time"]
+        cpus=config["bcftools_varcall_threads"],
+        mem=config["bcftools_varcall_mem_mb"],
+        time=config["bcftools_varcall_time"]
     threads:
-        config["bcftools_mpileup_threads"]
+        config["bcftools_varcall_threads"]
     shell:
         "bcftools mpileup --threads {threads} -d {params.max_depth} -q {params.min_MQ} -Q {params.min_BQ} "
         "--adjust-MQ {params.adjustMQ} --annotate {params.annotate_mpileup} -Oz -f {input.reference} {input.samples} 2> {log.mpileup} | "
