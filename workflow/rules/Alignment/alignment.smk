@@ -30,8 +30,8 @@ rule bwa_index:
 
 rule bwa_map:
     input:
-        forward_reads=reads_dir_path / "{sample}/{sample}_1." + config["reads_ext"] + ".gz"),
-        reverse_reads=reads_dir_path / "{sample}/{sample}_2." + config["reads_ext"] + ".gz"),
+        forward_reads=reads_dir_path / ("{sample}/{sample}_1." + config["reads_ext"] + ".gz"),
+        reverse_reads=reads_dir_path / ("{sample}/{sample}_2." + config["reads_ext"] + ".gz"),
         assembly=rules.bwa_index.output.assembly,
         amb=rules.bwa_index.output.amb,
         ann=rules.bwa_index.output.ann,
@@ -89,7 +89,7 @@ rule index_bam:
         cpus=config["index_bam_threads"],
         time=config["index_bam_time"],
         mem=config["index_bam_mem_mb"],
-    threads: 
+    threads:
         config["index_bam_threads"]
     shell:
         "samtools index -@ {threads} {input} > {log.std} 2>&1"
