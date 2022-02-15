@@ -1,8 +1,8 @@
 rule bcftools_varcall:
     input:
         assembly=rules.bwa_index.output.assembly,
-        samples=expand(out_alignment_dir_path / "{sample}/{sample}.clipped.bam", sample=config["reads"]),
-        indexes=expand(out_alignment_dir_path / "{sample}/{sample}.clipped.bam.bai", sample=config["reads"])
+        samples=expand(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam", sample=config["reads"]),
+        indexes=expand(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai", sample=config["reads"])
     output:
         mpileup=varcall_dir_path / (config["assembly"] + ".mpileup.vcf.gz"),
         call=varcall_dir_path / (config["assembly"] + ".vcf.gz")
