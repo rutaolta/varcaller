@@ -46,3 +46,4 @@ rule all:
         # Variant call:
         expand(varcall_dir_path / (config["assembly"] + ".mpileup.vcf.gz")),
         expand(varcall_dir_path / (config["assembly"] + ".vcf.gz"))
+        expand(varcall_dir_path / (config["assembly"] + ".filt.vcf.gz"))
