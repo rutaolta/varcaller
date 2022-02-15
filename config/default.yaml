@@ -5,6 +5,7 @@ reads_dir: "/mnt/tank/scratch/skliver/common/pinnipeds/pusa_sibirica/male/trimmo
 
 # output dirs
 out_alignment_dir: "data_output/alignment"
+varcall_dir: "data_output/varcall"
 
 # technical dirs
 scripts_dir: "workflow/scripts"
@@ -21,6 +22,13 @@ conda_config: "workflow/envs/conda.yaml"
 reads: ["male_paired_trimmed"] # name of files with reads without suffixes (names should end by _1 for forward, _2 for reverse)
 assembly: "draft_HiC" # name of file with assembly
 min_mapping_quality: 20
+bcftools_mpileup_annotate: "AD,INFO/AD,ADF,INFO/ADF,ADR,INFO/ADR,DP,SP,SCR,INFO/SCR"
+bcftools_call_annotate: "GQ,GP"
+bcftools_mpileup_max_depth: 250
+bcftools_mpileup_min_MQ: 30
+bcftools_mpileup_min_BQ: 30
+bcftools_filter_soft_filter: "LowQual"
+bcftools_filter_exclude: "QUAL < 20.0 || (FORMAT/SP > 60.0 | FORMAT/DP < 5.0 | FORMAT/GQ < 20.0)"
 
 #---- Extensions ----
 assemblies_ext: "fasta"
