@@ -38,7 +38,7 @@ rule bcftools_filter:
     input:
         rules.bcftools_varcall.output.call
     output:
-        varcall_dir_path / "{reference_basename}.filt.vcf.gz"
+        varcall_dir_path / (config["assembly"] + ".filt.vcf.gz")
     params:
         soft_filter=config["bcftools_filter_soft_filter"],
         exclude=config["bcftools_filter_exclude"],
