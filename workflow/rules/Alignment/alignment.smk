@@ -30,8 +30,8 @@ rule bwa_index:
 
 rule bwa_map:
     input:
-        forward_reads=reads_dir_path / ("{sample}_1." + config["reads_ext"] + ".gz"),
-        reverse_reads=reads_dir_path / ("{sample}_2." + config["reads_ext"] + ".gz"),
+        forward_reads=reads_dir_path / "{sample}/{sample}_1." + config["reads_ext"] + ".gz"),
+        reverse_reads=reads_dir_path / "{sample}/{sample}_2." + config["reads_ext"] + ".gz"),
         assembly=rules.bwa_index.output.assembly,
         amb=rules.bwa_index.output.amb,
         ann=rules.bwa_index.output.ann,
@@ -39,7 +39,7 @@ rule bwa_map:
         pac=rules.bwa_index.output.pac,
         sa=rules.bwa_index.output.sa
     output:
-        bam=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam")
+        bam=out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam"
     params:
         bwa_threads=config["bwa_mem_threads"],
         fixmate_threads=config["samtools_fixmate_threads"],
