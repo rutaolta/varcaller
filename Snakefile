@@ -13,7 +13,7 @@ assemblies_dir_path = Path(config["assemblies_dir"])
 reads_dir_path = Path(config["reads_dir"])
 # output dirs
 out_alignment_dir_path = Path(config["out_alignment_dir"])
-varcall_dir_path = Path(config["variantcall_dir"])
+varcall_dir_path = Path(config["varcall_dir"])
 # technical dirs
 scripts_dir_path = str(config["scripts_dir"])
 # log dirs
