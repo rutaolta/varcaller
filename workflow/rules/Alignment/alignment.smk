@@ -76,7 +76,7 @@ rule index_bam:
     input:
         rules.bwa_map.output.bam
     output:
-        bai=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai")
+        bai=out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai"
     log:
         std=log_dir_path / "{sample}/index_bam.log",
         cluster_log=cluster_log_dir_path / "{sample}.index_bam.cluster.log",
