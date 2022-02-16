@@ -1,1 +1,0 @@
-here should be placed reference assemblies

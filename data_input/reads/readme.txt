@@ -1,1 +1,0 @@
-here should be placed reads (forward and reverse) of samples interested in.

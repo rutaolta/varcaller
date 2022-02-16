@@ -1,7 +1,7 @@
 #---- Dirs ----
 # input dirs
-assemblies_dir: "data_input/assemblies/"
-reads_dir: "/mnt/tank/scratch/skliver/common/pinnipeds/pusa_sibirica/male/trimmomatic/"
+assemblies_dir: "data_input/test_assemblies/"
+reads_dir: "data_input/test_reads/"
 
 # output dirs
 out_alignment_dir: "data_output/alignment"

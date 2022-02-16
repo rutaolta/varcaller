@@ -11,3 +11,4 @@ cluster_logs/*.log
 cluster_logs/*.err
 .snakemake/
 benchmarks/
+__fixes__
