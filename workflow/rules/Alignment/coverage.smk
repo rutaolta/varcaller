@@ -5,7 +5,7 @@ rule mosdepth:
     output:
         out=out_alignment_dir_path / "{sample}/{sample}.coverage.per-base.bed.gz"
     params:
-        pefix=expand(out_alignment_dir_path / "{sample}/{sample}.coverage", sample=SAMPLES),
+        pefix=lambda wildcards, output: output["out"][:-16],
         min_mapping_quality=config["min_mapping_quality"]
     log:
         std=log_dir_path / "{sample}/mosdepth.log",

@@ -30,8 +30,8 @@ rule bwa_index:
 
 rule bwa_map:
     input:
-        forward_reads=reads_dir_path / ("{sample}_1." + config["reads_ext"] + ".gz"),
-        reverse_reads=reads_dir_path / ("{sample}_2." + config["reads_ext"] + ".gz"),
+        forward_reads=reads_dir_path / ("{sample}/{sample}_1." + config["reads_ext"] + ".gz"),
+        reverse_reads=reads_dir_path / ("{sample}/{sample}_2." + config["reads_ext"] + ".gz"),
         assembly=rules.bwa_index.output.assembly,
         amb=rules.bwa_index.output.amb,
         ann=rules.bwa_index.output.ann,
@@ -39,14 +39,14 @@ rule bwa_map:
         pac=rules.bwa_index.output.pac,
         sa=rules.bwa_index.output.sa
     output:
-        bam=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam")
+        bam=out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam"
     params:
         bwa_threads=config["bwa_mem_threads"],
         fixmate_threads=config["samtools_fixmate_threads"],
         sort_threads=config["samtools_sort_threads"],
         markdup_threads=config["samtools_markdup_threads"],
         per_thread_sort_mem="%sG" % config["bwa_map_per_thread_mem_mb"],
-        prefix=expand(out_alignment_dir_path / "{sample}/{sample}", sample=SAMPLES)
+        prefix=lambda wildcards, output: output["bam"][:-4]
     log:
         bwa_mem=log_dir_path / "{sample}/bwa_mem.log",
         samtools_fixmate=log_dir_path / "{sample}/samtools_fixmate.log",
@@ -76,7 +76,7 @@ rule index_bam:
     input:
         rules.bwa_map.output.bam
     output:
-        bai=temp(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai")
+        bai=out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai"
     log:
         std=log_dir_path / "{sample}/index_bam.log",
         cluster_log=cluster_log_dir_path / "{sample}.index_bam.cluster.log",
@@ -89,7 +89,7 @@ rule index_bam:
         cpus=config["index_bam_threads"],
         time=config["index_bam_time"],
         mem=config["index_bam_mem_mb"],
-    threads: 
+    threads:
         config["index_bam_threads"]
     shell:
         "samtools index -@ {threads} {input} > {log.std} 2>&1"

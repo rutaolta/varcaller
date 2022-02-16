@@ -13,6 +13,7 @@ assemblies_dir_path = Path(config["assemblies_dir"])
 reads_dir_path = Path(config["reads_dir"])
 # output dirs
 out_alignment_dir_path = Path(config["out_alignment_dir"])
+varcall_dir_path = Path(config["varcall_dir"])
 # technical dirs
 scripts_dir_path = str(config["scripts_dir"])
 # log dirs
@@ -26,15 +27,23 @@ benchmark_dir_path = Path(config["benchmark_dir"])
 
 # SAMPLES = get_scaffolds(reads_dir_path)
 
+if "reads" not in config: # for parse samples IDs from directory
+    config["reads"] = [d.name for d in reads_dir_path.iterdir() if d.is_dir()]
 SAMPLES=config["reads"]
 
 #### load rules #####
 include: "workflow/rules/Alignment/alignment.smk"
 include: "workflow/rules/Alignment/coverage.smk"
+include: "workflow/rules/VariantCall/Bcftools.smk"
 
 ##### target rules #####
 localrules: all
 
 rule all:
     input:
-        expand(out_alignment_dir_path / "{sample}/{sample}.coverage.per-base.bed.gz", sample=SAMPLES)
+        # Mosdepth:
+        expand(out_alignment_dir_path / "{sample}/{sample}.coverage.per-base.bed.gz", sample=SAMPLES),
+        # Variant call:
+        expand(varcall_dir_path / (config["assembly"] + ".mpileup.vcf.gz")),
+        expand(varcall_dir_path / (config["assembly"] + ".vcf.gz")),
+        expand(varcall_dir_path / (config["assembly"] + ".filt.vcf.gz"))
