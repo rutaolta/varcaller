@@ -1,6 +1,6 @@
 rule bcftools_varcall:
     input:
-        assembly=rules.bwa_index.output.assembly,
+        assembly=rules.bwa_index.input.assembly,
         samples=expand(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam", sample=config["reads"]),
         indexes=expand(out_alignment_dir_path / "{sample}/{sample}.sorted.mkdup.bam.bai", sample=config["reads"])
     output:
@@ -14,12 +14,12 @@ rule bcftools_varcall:
         min_MQ=config["bcftools_mpileup_min_MQ"],
         min_BQ=config["bcftools_mpileup_min_BQ"]
     log:
-        mpileup=log_dir_path / (config["assembly"] + ".bcftools_mpileup.log"),
-        call=log_dir_path / (config["assembly"] + ".bcftools_call.log"),
+        mpileup=log_dir_path / config["assembly"] / "bcftools_mpileup.log",
+        call=log_dir_path / config["assembly"] / "bcftools_call.log",
         cluster_log=cluster_log_dir_path / (config["assembly"] + ".bcftools_varcall.cluster.log"),
         cluster_err=cluster_log_dir_path / (config["assembly"] + ".bcftools_varcall.cluster.err")
     benchmark:
-        benchmark_dir_path / (config["assembly"] + ".bcftools_varcall.benchmark.txt")
+        benchmark_dir_path / config["assembly"] / "bcftools_varcall.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -43,11 +43,11 @@ rule bcftools_filter:
         soft_filter=config["bcftools_filter_soft_filter"],
         exclude=config["bcftools_filter_exclude"],
     log:
-        std=log_dir_path / (config["assembly"] + ".bcftools_filter.log"),
+        std=log_dir_path / config["assembly"] / "bcftools_filter.log",
         cluster_log=cluster_log_dir_path / (config["assembly"] + ".bcftools_filter.cluster.log"),
         cluster_err=cluster_log_dir_path / (config["assembly"] + ".bcftools_filter.cluster.err")
     benchmark:
-        benchmark_dir_path / (config["assembly"] + ".bcftools_filter.benchmark.txt")
+        benchmark_dir_path / config["assembly"] / "bcftools_filter.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:

@@ -1,9 +1,8 @@
-data_input/assemblies/*.gz
-data_input/assemblies/*.fasta
-data_input/assemblies/*.fasta.*
-data_input/reads/*.gz
-data_input/reads/*.fasta
-data_input/reads/*.fasta.*
+data_input/test_assemblies/*.f*a
+data_input/test_assemblies/*.f*a.??
+data_input/test_assemblies/*.f*a.???
+data_input/test_reads/*/*.f*q
+data_input/test_reads/*/*.f*q.??
 data_output/
 logs/*.log
 logs/*/*.log

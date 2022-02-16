@@ -19,8 +19,8 @@ benchmark_dir: "benchmarks"
 conda_config: "workflow/envs/conda.yaml"
 
 # parameters
-reads: ["male_paired_trimmed"] # name of files with reads without suffixes (names should end by _1 for forward, _2 for reverse)
-assembly: "draft_HiC" # name of file with assembly
+reads: ["_S288C"] # name of files with reads without suffixes (names should end by _1 for forward, _2 for reverse)
+assembly: "_S288C" # name of file with assembly
 min_mapping_quality: 20
 bcftools_mpileup_annotate: "AD,INFO/AD,ADF,INFO/ADF,ADR,INFO/ADR,DP,SP,SCR,INFO/SCR"
 bcftools_call_annotate: "GQ,GP"
