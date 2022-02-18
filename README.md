@@ -5,6 +5,8 @@ As an output it generates ... (pipeline is in progress).
 
 All general results you can find in `data_output` folder.
 
+All additional information can also be found in `readme` files incide required directories.
+
 # Configure Pipeline
 
 `git clone https://github.com/rutaolta/reseqpipe.git`
