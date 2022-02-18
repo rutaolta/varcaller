@@ -2,11 +2,11 @@ rule bwa_index:
     input:
         assembly=get_fasta
     output:
-        amb=assemblies_dir_path / "{sample}.amb", #TODO place indexes in output dir
-        ann=assemblies_dir_path / "{sample}.ann",
-        bwt=assemblies_dir_path / "{sample}.bwt",
-        pac=assemblies_dir_path / "{sample}.pac",
-        sa=assemblies_dir_path / "{sample}.sa"
+        amb=out_index_dir_path / "{sample}.amb",
+        ann=out_index_dir_path / "{sample}.ann",
+        bwt=out_index_dir_path / "{sample}.bwt",
+        pac=out_index_dir_path / "{sample}.pac",
+        sa=out_index_dir_path / "{sample}.sa"
     params:
     log:
         log=log_dir_path / "{sample}/bwa_index.log",
@@ -23,7 +23,8 @@ rule bwa_index:
     threads:
         config["bwa_index_threads"]
     shell:
-        "bwa index {input.assembly} -p {assemblies_dir_path}/{wildcards.sample} 2>{log.log}"
+        "bwa index {input.assembly} -p {out_index_dir_path}/{wildcards.sample} 2>{log.log}"
+#TODO prefix
 
 
 rule bwa_map:
@@ -63,7 +64,7 @@ rule bwa_map:
     threads:
         config["bwa_mem_threads"] + config["samtools_fixmate_threads"] + config["samtools_sort_threads"] + config["samtools_markdup_threads"]
     shell:
-        "bwa mem -t {params.bwa_threads} {assemblies_dir_path}/{wildcards.sample} <(zcat -fc {input.forward_reads}) <(zcat -fc {input.reverse_reads}) "
+        "bwa mem -t {params.bwa_threads} {out_index_dir_path}/{wildcards.sample} <(zcat -fc {input.forward_reads}) <(zcat -fc {input.reverse_reads}) "
         "-R  \'@RG\\tID:{wildcards.sample}\\tPU:x\\tSM:{wildcards.sample}\\tPL:Illumina\\tLB:x\' 2>{log.bwa_mem} | "
         "samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.samtools_fixmate} | "
         "samtools sort -T {params.prefix} -@ {params.sort_threads} -m {params.per_thread_sort_mem} 2>{log.samtools_sort} | "

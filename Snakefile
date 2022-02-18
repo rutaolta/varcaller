@@ -8,9 +8,8 @@ min_version("5.4.0")
 ##### setup config #####
 configfile: "config/config.yaml"
 
-# input dirs
-assemblies_dir_path = Path(config["assemblies_dir"])
 # output dirs
+out_index_dir_path = Path(config["out_index_dir"])
 out_alignment_dir_path = Path(config["out_alignment_dir"])
 varcall_dir_path = Path(config["varcall_dir"])
 # technical dirs

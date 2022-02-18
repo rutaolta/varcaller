@@ -1,9 +1,9 @@
 #---- Dirs ----
 # input dirs
-assemblies_dir: "data_input/test_assemblies/"
 samples: "data_input/samples.tsv"
 
 # output dirs
+out_index_dir: "data_output/index"
 out_alignment_dir: "data_output/alignment"
 varcall_dir: "data_output/varcall"
 
@@ -50,7 +50,7 @@ bcftools_filter_time: "80:00:00"
 
 #---- Memory ----
 # suppl
-bwa_map_per_thread_mem_mb: 1
+bwa_map_per_thread_mem_mb: 10
 # rules
 bwa_index_mem_mb: 30000
 bwa_mem_mem_mb: 50000
