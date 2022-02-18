@@ -1,5 +1,3 @@
-data_input/test_assemblies/*
-data_input/test_reads/*
 data_output/
 logs/
 cluster_logs/
