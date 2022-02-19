@@ -65,7 +65,7 @@ rule bcftools_filter:
 
 checkpoint bcftools_vcf_subset:
     input:
-        varcall_dir_path / (config["assembly"] + ".filt.vcf.gz")
+        varcall_dir_path / (config["samples"] + ".filt.vcf.gz")
     output:
         directory(varcall_dir_path / "vcf_subset")
     log:
@@ -92,7 +92,7 @@ ruleorder: bcftools_vcf_subset > create_out_dirs > bcftools_filter_indel_snp
 
 rule bcftools_filter_indel_snp:
     input:
-        subvcf=expand(vcf_subset_dir_path / "{SAMPLE}/{SAMPLE}.vcf.gz", SAMPLE=config["reads"])
+        subvcf=expand(vcf_subset_dir_path / "{SAMPLE}/{SAMPLE}.vcf.gz", SAMPLE=config["samples"])
     output:
         directory(vcf_subset_dir_path)
     params:

@@ -6,6 +6,7 @@ samples: "data_input/samples.tsv"
 out_index_dir: "data_output/index"
 out_alignment_dir: "data_output/alignment"
 varcall_dir: "data_output/varcall"
+vcf_subset_dir: "data_output/varcall/vcf_subset"
 
 # technical dirs
 scripts_dir: "workflow/scripts"
