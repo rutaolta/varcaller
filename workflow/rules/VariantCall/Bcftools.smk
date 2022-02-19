@@ -62,3 +62,57 @@ rule bcftools_filter:
         config["bcftools_filter_threads"]
     shell:
         "bcftools filter -Oz -s {params.soft_filter} --exclude '{params.exclude}' {input} > {output} 2> {log.std}; "
+
+checkpoint bcftools_vcf_subset:
+    input:
+        varcall_dir_path / (config["samples"] + ".filt.vcf.gz")
+    output:
+        directory(varcall_dir_path / "vcf_subset")
+    log:
+        std=log_dir_path / "bcftools_vcf_subset.log",
+        cluster_log=cluster_log_dir_path / "bcftools_vcf_subset.cluster.log",
+        cluster_err=cluster_log_dir_path / "bcftools_vcf_subset.cluster.err"
+    benchmark:
+        benchmark_dir_path / "bcftools_vcf_subset.benchmark.txt"
+    conda:
+        "../../../%s" % config["conda_config"]
+    resources:
+        cpus=config["bcftools_vcf_subset_threads"],
+        mem=config["bcftools_vcf_subset_mem_mb"],
+        time=config["bcftools_vcf_subset_time"]
+    threads:
+        config["bcftools_vcf_subset_threads"]
+    shell:
+        "for SAMPLE in `bcftools query -l {input}`; "
+        "do mkdir -p {output}/${{SAMPLE}}; "
+        "bcftools view -Oz -s ${{SAMPLE}} {input} > {output}/${{SAMPLE}}/${{SAMPLE}}.vcf.gz; "
+        "done"
+
+ruleorder: bcftools_vcf_subset > create_out_dirs > bcftools_filter_indel_snp
+
+rule bcftools_filter_indel_snp:
+    input:
+        subvcf=expand(vcf_subset_dir_path / "{SAMPLE}/{SAMPLE}.vcf.gz", SAMPLE=config["samples"])
+    output:
+        directory(vcf_subset_dir_path)
+    params:
+        type_indel=config["bcftools_filter_indel_type"],
+        type_snp=config["bcftools_filter_snp_type"]
+    log:
+        std=log_dir_path / "bcftools_filter_indel_snp.log",
+        cluster_log=cluster_log_dir_path / "bcftools_filter_indel_snp.cluster.log",
+        cluster_err=cluster_log_dir_path / "bcftools_filter_indel_snp.cluster.err"
+    benchmark:
+        benchmark_dir_path / "bcftools_filter_indel_snp.benchmark.txt"
+    conda:
+        "../../../%s" % config["conda_config"]
+    resources:
+        cpus=config["bcftools_filter_indel_snp_threads"],
+        mem=config["bcftools_filter_indel_snp_mem_mb"],
+        time=config["bcftools_filter_indel_snp_time"]
+    threads:
+        config["bcftools_filter_indel_snp_threads"]
+    shell:
+        "bcftools  filter -i {params.type_indel} -Oz {input.subvcf} > {output}/{{SAMPLE}}.indel.vcf.gz; "
+        "&& "
+        "bcftools  filter -i {params.type_snp} -Oz {input.subvcf} > {output}/{{SAMPLE}}.snp.vcf.gz"

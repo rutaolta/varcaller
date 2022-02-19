@@ -6,6 +6,7 @@ samples: "data_input/samples.tsv"
 out_index_dir: "data_output/index"
 out_alignment_dir: "data_output/alignment"
 varcall_dir: "data_output/varcall"
+vcf_subset_dir: "data_output/varcall/vcf_subset"
 
 # technical dirs
 scripts_dir: "workflow/scripts"
@@ -27,6 +28,8 @@ bcftools_mpileup_min_MQ: 30
 bcftools_mpileup_min_BQ: 30
 bcftools_filter_soft_filter: "LowQual"
 bcftools_filter_exclude: "QUAL < 20.0 || (FORMAT/SP > 60.0 | FORMAT/DP < 5.0 | FORMAT/GQ < 20.0)"
+bcftools_filter_indel_type: "TYPE='indel'"
+bcftools_filter_snp_type: "TYPE='snp'"
 
 #---- Threads ----
 bwa_index_threads: 30
@@ -39,6 +42,8 @@ index_bam_threads: 30
 mosdepth_threads: 16
 bcftools_varcall_threads: 32
 bcftools_filter_threads: 10
+bcftools_vcf_subset_threads: 2
+bcftools_filter_indel_snp_threads: 2
 
 #---- Time ----
 bwa_index_time: "12:00:00"
@@ -47,6 +52,8 @@ index_bam_time: "12:00:00"
 mosdepth_time: "12:00:00"
 bcftools_varcall_time: "100:00:00"
 bcftools_filter_time: "80:00:00"
+bcftools_vcf_subset_time: "80:00:00"
+bcftools_filter_indel_snp_time: "80:00:00"
 
 #---- Memory ----
 # suppl
@@ -60,3 +67,5 @@ index_bam_mem_mb: 10000
 mosdepth_mem_mb: 10000
 bcftools_varcall_mem_mb: 100000
 bcftools_filter_mem_mb: 40000
+bcftools_vcf_subset_mem_mb: 40000
+bcftools_filter_indel_snp_mem_mb: 50000
