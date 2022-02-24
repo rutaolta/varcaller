@@ -6,3 +6,5 @@ benchmarks/
 __fixes__
 *.ipynb
 .vscode/
+*.fai
+*.gzi

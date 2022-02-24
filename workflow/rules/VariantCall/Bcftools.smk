@@ -1,4 +1,6 @@
-ruleorder: bcftools_varcall > bcftools_filter
+import os
+
+ruleorder: bcftools_varcall > bcftools_filter > bcftools_vcf_subset > bcftools_filter_indel_snp
 
 rule bcftools_varcall:
     input:
@@ -34,8 +36,6 @@ rule bcftools_varcall:
         "bcftools mpileup --threads {threads} -d {params.max_depth} -q {params.min_MQ} -Q {params.min_BQ} "
         "--adjust-MQ {params.adjustMQ} --annotate {params.annotate_mpileup} -Oz -f {input.assembly} {input.samples} 2> {log.mpileup} | "
         "tee {output.mpileup} | bcftools call -Oz -mv --annotate {params.annotate_call} > {output.call} 2> {log.call}"
-#TODO error: Call: unrecognized option '--annotate'
-#TODO error: Mpileup: Could not parse tag "SCR" in "AD,INFO/AD,ADF,INFO/ADF,ADR,INFO/ADR,DP,SP,SCR,INFO/SCR"
 
 
 rule bcftools_filter:
@@ -63,17 +63,21 @@ rule bcftools_filter:
     shell:
         "bcftools filter -Oz -s {params.soft_filter} --exclude '{params.exclude}' {input} > {output} 2> {log.std}; "
 
+
 checkpoint bcftools_vcf_subset:
     input:
-        varcall_dir_path / (config["samples"] + ".filt.vcf.gz")
+        rules.bcftools_filter.output[0] #varcall_dir_path / "{sample}/{reads}.filt.vcf.gz"
     output:
-        directory(varcall_dir_path / "vcf_subset")
+        dir=directory(vcf_subset_dir_path / "{sample}/{reads}"),
+        variants=vcf_subset_dir_path / "{sample}/{reads}.csv"
+    params:
+        prefix=lambda w, output: os.path.splitext(output.variants)[0]
     log:
-        std=log_dir_path / "bcftools_vcf_subset.log",
-        cluster_log=cluster_log_dir_path / "bcftools_vcf_subset.cluster.log",
-        cluster_err=cluster_log_dir_path / "bcftools_vcf_subset.cluster.err"
+        std=log_dir_path / "{sample}/{reads}.bcftools_vcf_subset.log",
+        cluster_log=cluster_log_dir_path / "{sample}/{reads}.bcftools_vcf_subset.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/{reads}.bcftools_vcf_subset.cluster.err"
     benchmark:
-        benchmark_dir_path / "bcftools_vcf_subset.benchmark.txt"
+        benchmark_dir_path / "{sample}/{reads}.bcftools_vcf_subset.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -83,27 +87,28 @@ checkpoint bcftools_vcf_subset:
     threads:
         config["bcftools_vcf_subset_threads"]
     shell:
-        "for SAMPLE in `bcftools query -l {input}`; "
-        "do mkdir -p {output}/${{SAMPLE}}; "
-        "bcftools view -Oz -s ${{SAMPLE}} {input} > {output}/${{SAMPLE}}/${{SAMPLE}}.vcf.gz; "
-        "done"
+        "mkdir {output.dir}; "
+        "for VARIANT in `bcftools query -l {input}`; "
+        "do echo $VARIANT >> {output.variants}; "
+        "bcftools view -Oz -s $VARIANT {input} > {output.dir}/$VARIANT.vcf.gz; "
+        "done; "
 
-ruleorder: bcftools_vcf_subset > create_out_dirs > bcftools_filter_indel_snp
 
 rule bcftools_filter_indel_snp:
     input:
-        subvcf=expand(vcf_subset_dir_path / "{SAMPLE}/{SAMPLE}.vcf.gz", SAMPLE=config["samples"])
+        subvcf=vcf_subset_dir_path / "{sample}/{reads}/{variant}.vcf.gz"
     output:
-        directory(vcf_subset_dir_path)
+        indel=vcf_subset_dir_path / "{sample}/{reads}/{variant}.indel.vcf.gz",
+        snp=vcf_subset_dir_path / "{sample}/{reads}/{variant}.snp.vcf.gz"
     params:
         type_indel=config["bcftools_filter_indel_type"],
         type_snp=config["bcftools_filter_snp_type"]
     log:
-        std=log_dir_path / "bcftools_filter_indel_snp.log",
-        cluster_log=cluster_log_dir_path / "bcftools_filter_indel_snp.cluster.log",
-        cluster_err=cluster_log_dir_path / "bcftools_filter_indel_snp.cluster.err"
+        std=log_dir_path / "{sample}/{reads}/{variant}.bcftools_filter_indel_snp.log",
+        cluster_log=cluster_log_dir_path / "{sample}/{reads}/{variant}.bcftools_filter_indel_snp.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/{reads}/{variant}.bcftools_filter_indel_snp.cluster.err"
     benchmark:
-        benchmark_dir_path / "bcftools_filter_indel_snp.benchmark.txt"
+        benchmark_dir_path / "{sample}/{reads}/{variant}.bcftools_filter_indel_snp.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -113,6 +118,6 @@ rule bcftools_filter_indel_snp:
     threads:
         config["bcftools_filter_indel_snp_threads"]
     shell:
-        "bcftools  filter -i {params.type_indel} -Oz {input.subvcf} > {output}/{{SAMPLE}}.indel.vcf.gz; "
-        "&& "
-        "bcftools  filter -i {params.type_snp} -Oz {input.subvcf} > {output}/{{SAMPLE}}.snp.vcf.gz"
+        "bcftools  filter -i {params.type_indel} -Oz {input.subvcf} > {output.indel}; "
+        "bcftools  filter -i {params.type_snp} -Oz {input.subvcf} > {output.snp} "
+

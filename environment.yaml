@@ -2,5 +2,5 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - python=3.8.10
-  - snakemake=6.4.1
+  - python>=3.8.10
+  - snakemake>=6.4.1

@@ -1,5 +1,5 @@
 #---- Bioconda config ----
-name: reseqpipe
+name: varcaller
 channels:
   - conda-forge
   - bioconda
