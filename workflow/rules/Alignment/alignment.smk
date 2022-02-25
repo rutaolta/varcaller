@@ -15,7 +15,7 @@ rule bwa_index:
     benchmark:
         benchmark=benchmark_dir_path / "{sample}/bwa_index.benchmark.txt"
     conda:
-       "../../../envs/conda.yaml"
+        "../../../%s" % config["conda_config"]
     resources:
         cpus=config["bwa_index_threads"],
         time=config["bwa_index_time"],
@@ -56,7 +56,7 @@ rule bwa_map:
     benchmark:
         benchmark_dir_path / "{sample}/{reads}.bwa_map.benchmark.txt"
     conda:
-       "../../../envs/conda.yaml"
+        "../../../%s" % config["conda_config"]
     resources:
         cpus=config["bwa_mem_threads"] + config["samtools_fixmate_threads"] + config["samtools_sort_threads"] + config["samtools_markdup_threads"] + 1,
         time=config["bwa_map_time"],
@@ -83,7 +83,7 @@ rule index_bam:
     benchmark:
         benchmark_dir_path / "{sample}/{reads}.index_bam.benchmark.txt"
     conda:
-        "../../../envs/conda.yaml"
+        "../../../%s" % config["conda_config"]
     resources:
         cpus=config["index_bam_threads"],
         time=config["index_bam_time"],
