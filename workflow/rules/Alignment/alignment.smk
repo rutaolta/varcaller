@@ -65,7 +65,7 @@ rule bwa_map:
         config["bwa_mem_threads"] + config["samtools_fixmate_threads"] + config["samtools_sort_threads"] + config["samtools_markdup_threads"]
     shell:
         "bwa mem -t {params.bwa_threads} {out_index_dir_path}/{wildcards.sample} <(zcat -fc {input.forward_reads}) <(zcat -fc {input.reverse_reads}) "
-        "-R  \'@RG\\tID:{wildcards.sample}\\tPU:x\\tSM:{wildcards.sample}\\tPL:Illumina\\tLB:x\' 2>{log.bwa_mem} | "
+        "-R  \'@RG\\tID:{wildcards.reads}\\tPU:x\\tSM:{wildcards.reads}\\tPL:Illumina\\tLB:x\' 2>{log.bwa_mem} | "
         "samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.samtools_fixmate} | "
         "samtools sort -T {params.prefix} -@ {params.sort_threads} -m {params.per_thread_sort_mem} 2>{log.samtools_sort} | "
         "samtools markdup -@ {params.markdup_threads} - {output.bam} 2>{log.samtools_markdup} "
