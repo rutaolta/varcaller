@@ -1,3 +1,3 @@
 index	platform	assembly	forward_read	reverse_read
-1	ILLUMINA	data_input/test_assemblies/S288C.fa	data_input/test_reads/S288C/S288C_1.fq	data_input/test_reads/S288C/S288C_2.fq
-2	ILLUMINA	data_input/test_assemblies/_S288C.fasta.gz	data_input/test_reads/_S288C/_S288C_1.fastq.gz	data_input/test_reads/_S288C/_S288C_2.fastq.gz
+1	ILLUMINA	data_input/test_assemblies/assembly1.fa	data_input/test_reads/sample1/sample1_1.fq.gz	data_input/test_reads/sample1/sample1_2.fq.gz
+2	ILLUMINA	data_input/test_assemblies/assembly2.fasta.gz	data_input/test_reads/sample2/sample2_1.fastq.gz	data_input/test_reads/sample2/sample2_2.fastq.gz
