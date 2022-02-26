@@ -9,6 +9,7 @@ min_version("5.4.0")
 configfile: "config/config.yaml"
 
 # output dirs
+assembly_stats_dir_path = Path(config["assembly_stats_dir"])
 out_index_dir_path = Path(config["out_index_dir"])
 out_alignment_dir_path = Path(config["out_alignment_dir"])
 varcall_dir_path = Path(config["varcall_dir"])
@@ -28,10 +29,13 @@ include: "workflow/rules/Alignment/alignment.smk"
 include: "workflow/rules/Alignment/coverage.smk"
 include: "workflow/rules/VariantCall/Bcftools.smk"
 include: "workflow/rules/Final/final.smk"
+include: "workflow/rules/Preprocessing/assembly_stats.smk"
 
 ##### target rules #####
 localrules: all
 
 rule all:
     input:
-        expand(Path("data_output/result") / "{sample}/{reads}.txt", zip, sample=SAMPLES.assembly_name, reads=SAMPLES.forward_read_name)
+        expand(Path("data_output/result") / "{sample}/{reads}.txt", zip, sample=SAMPLES.assembly_name, reads=SAMPLES.forward_read_name),
+        # coverage visualization
+        expand(out_alignment_dir_path / "{sample}/{reads}.{size}.track.jet.png", zip, sample=SAMPLES.assembly_name, reads=SAMPLES.forward_read_name, size=config["coverage_stats_window_size_list"])
