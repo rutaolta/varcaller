@@ -58,7 +58,7 @@ rule bwa_map:
     conda:
         "../../../%s" % config["conda_config"]
     resources:
-        cpus=config["bwa_mem_threads"] + config["samtools_fixmate_threads"] + config["samtools_sort_threads"] + config["samtools_markdup_threads"] + 1,
+        cpus=config["bwa_mem_threads"] + config["samtools_fixmate_threads"] + config["samtools_sort_threads"] + config["samtools_markdup_threads"],
         time=config["bwa_map_time"],
         mem=config["bwa_mem_mem_mb"] + config["samtools_fixmate_mem_mb"] + config["bwa_map_per_thread_mem_mb"] * config["samtools_sort_threads"] * 1024 + config["samtools_markdup_mem_mb"]
     threads:
