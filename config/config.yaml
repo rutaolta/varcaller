@@ -3,6 +3,7 @@
 samples: "data_input/samples.tsv"
 
 # output dirs
+assembly_stats_dir: "data_output/assembly_stats"
 out_index_dir: "data_output/index"
 out_alignment_dir: "data_output/alignment"
 varcall_dir: "data_output/varcall"
@@ -30,6 +31,9 @@ bcftools_filter_soft_filter: "LowQual"
 bcftools_filter_exclude: "QUAL < 20.0 || (FORMAT/SP > 60.0 | FORMAT/DP < 5.0 | FORMAT/GQ < 20.0)"
 bcftools_filter_indel_type: "TYPE='indel'"
 bcftools_filter_snp_type: "TYPE='snp'"
+# visualization
+number_of_chromosomes: 17
+coverage_stats_window_size_list: [1000, 10000]
 
 #---- Threads ----
 bwa_index_threads: 4
@@ -38,18 +42,24 @@ bwa_mem_threads: 10
 samtools_fixmate_threads: 6
 samtools_sort_threads: 10
 samtools_markdup_threads: 6
+samtools_faidx_threads: 2
 index_bam_threads: 8
 mosdepth_threads: 16
+covarage_stats_threads: 1
+coverage_visualization_threads: 4
 bcftools_varcall_threads: 32
 bcftools_filter_threads: 10
 bcftools_vcf_subset_threads: 2
 bcftools_filter_indel_snp_threads: 2
 
 #---- Time ----
+samtools_faidx_time: "10:00:00"
 bwa_index_time: "12:00:00"
 bwa_map_time: "24:00:00"
 index_bam_time: "12:00:00"
 mosdepth_time: "12:00:00"
+covarage_stats_time: "80:00:00"
+coverage_visualization_time: "5:00:00"
 bcftools_varcall_time: "100:00:00"
 bcftools_filter_time: "80:00:00"
 bcftools_vcf_subset_time: "80:00:00"
@@ -63,8 +73,11 @@ bwa_index_mem_mb: 30000
 bwa_mem_mem_mb: 50000
 samtools_fixmate_mem_mb: 20000
 samtools_markdup_mem_mb: 20000
+samtools_faidx_mem_mb: 10000
 index_bam_mem_mb: 10000
 mosdepth_mem_mb: 10000
+covarage_stats_mem_mb: 20000
+coverage_visualization_mem_mb: 20000
 bcftools_varcall_mem_mb: 100000
 bcftools_filter_mem_mb: 40000
 bcftools_vcf_subset_mem_mb: 40000
