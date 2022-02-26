@@ -1,6 +1,6 @@
 # About
 
-Pipeline gets assembly in fasta format, and reads in fq format as default (see `Required settings` section below). 
+Pipeline gets assembly in fasta format, and reads in fq format as default (see `Required settings` section below).
 As an output it generates ... (pipeline is in progress).
 
 All general results you can find in `data_output` folder.
@@ -27,14 +27,14 @@ Activate conda environment with snakemake:
 
 # Run
 
-`snakemake --cores 32 --configfile config/default.yaml --forceall --use-conda --profile profile/slurm/ --printshellcmds --latency-wait 60`
+`snakemake --cores 32 --configfile config/config.yaml --forceall --use-conda --profile profile/slurm/ --printshellcmds --latency-wait 60`
 
 # Required settings
 
-Extensions of assembly and reads can be changed in `config/default.yaml` in "Extensions" section:
+Extensions of assembly and reads can be changed in `config/config.yaml` in "Extensions" section:
 
     - `assemblies_ext: "your desired extension"`
-    
+
     - `reads_ext: "your desired extension"`
 
 The name of file with reference assembly should be defined in `config/default.yaml` in "Parameters" section:
