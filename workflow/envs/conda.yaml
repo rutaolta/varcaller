@@ -9,3 +9,10 @@ dependencies:
   - samtools>=1.10
   - mosdepth>=0.3.1
   - bcftools>=1.12
+  - samtools>=1.10
+  - python=3.8
+  - pip:
+    - "--editable=git+https://github.com/tomarovsky/Biocrutch.git#egg=Biocrutch"
+    - "--editable=git+https://github.com/tomarovsky/MACE.git#egg=MACE"
+    - "--editable=git+https://github.com/mahajrod/MAVR.git#egg=MAVR"
+    - "--editable=git+https://github.com/mahajrod/RouToolPa.git#egg=RouToolPa"
