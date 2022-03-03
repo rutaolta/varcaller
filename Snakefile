@@ -28,14 +28,22 @@ include: "workflow/rules/common.smk"
 include: "workflow/rules/Alignment/alignment.smk"
 include: "workflow/rules/Alignment/coverage.smk"
 include: "workflow/rules/VariantCall/Bcftools.smk"
-include: "workflow/rules/Final/final.smk"
 include: "workflow/rules/Preprocessing/assembly_stats.smk"
+
 
 ##### target rules #####
 localrules: all
 
 rule all:
     input:
-        expand(Path("data_output/result") / "{sample}/{reads}.txt", zip, sample=SAMPLES.assembly_name, reads=SAMPLES.forward_read_name),
+        # alignment
+        expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
+        
+        # variant calling
+        lambda wildcards: aggregate_file_names(wildcards, str("{subset}/"+ASSEMBLY+".indel.vcf.gz")),
+        lambda wildcards: aggregate_file_names(wildcards, str("{subset}/"+ASSEMBLY+".snp.vcf.gz")),
+
         # coverage visualization
-        expand(out_alignment_dir_path / "{sample}/{reads}.{size}.track.jet.png", zip, sample=SAMPLES.assembly_name, reads=SAMPLES.forward_read_name, size=config["coverage_stats_window_size_list"])
+        expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE)
+
+

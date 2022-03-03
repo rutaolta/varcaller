@@ -3,15 +3,16 @@ rule mosdepth:
         bam=rules.bwa_map.output.bam,
         bai=rules.index_bam.output.bai
     output:
-        out=out_alignment_dir_path / "{sample}/{reads}.coverage.per-base.bed.gz"
+        out=out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
     params:
-        min_mapping_quality=config["min_mapping_quality"]
+        min_mapping_quality=config["min_mapping_quality"],
+        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample))
     log:
-        std=log_dir_path / "{sample}/{reads}.mosdepth.log",
-        cluster_log=cluster_log_dir_path / "{sample}/{reads}.mosdepth.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/{reads}.mosdepth.cluster.err"
+        std=log_dir_path / "{sample}/{assembly}.{sample}.mosdepth.log",
+        cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.mosdepth.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/{assembly}.{sample}.mosdepth.cluster.err"
     benchmark:
-         benchmark_dir_path / "{sample}/{reads}.mosdepth.benchmark.txt"
+         benchmark_dir_path / "{sample}/{assembly}.{sample}.mosdepth.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -20,82 +21,81 @@ rule mosdepth:
         mem=config["mosdepth_mem_mb"],
     threads: config["mosdepth_threads"]
     shell:
-        "mosdepth -t {threads} --mapq {params.min_mapping_quality} {out_alignment_dir_path}/{wildcards.sample}/{wildcards.reads}.coverage {input.bam} > {log.std} 2>&1"
-#TODO prefix
+        "mosdepth -t {threads} --mapq {params.min_mapping_quality} {params.prefix} {input.bam} > {log.std} 2>&1"
 
 
 rule coverage_whole_genome_stats:
     input:
-        out_alignment_dir_path / "{sample}/{reads}.coverage.per-base.bed.gz"
+        rules.mosdepth.output.out #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
     output:
-        out_alignment_dir_path / "{sample}/{reads}_whole_genome_stats.csv"
+        out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv"
     params:
-        prefix=lambda wildcards, output: output[0][:-23]
+        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample))
     log:
-        std=log_dir_path / "{sample}/{reads}.coverage_whole_genome_stats.log",
-        cluster_log=cluster_log_dir_path / "{sample}/{reads}.coverage_whole_genome_stats.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/{reads}.coverage_whole_genome_stats.cluster.err"
+        std=log_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.log",
+        cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.cluster.err"
     benchmark:
-         benchmark_dir_path / "{sample}/{reads}.coverage_whole_genome_stats.benchmark.txt"
+         benchmark_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
-        cpus=config["covarage_stats_threads"],
-        time=config["covarage_stats_time"],
-        mem=config["covarage_stats_mem_mb"],
+        cpus=config["coverage_stats_threads"],
+        time=config["coverage_stats_time"],
+        mem=config["coverage_stats_mem_mb"],
     threads:
-        config["covarage_stats_threads"]
+        config["coverage_stats_threads"]
     shell:
         "coverage_statistics.py -i {input} --tool-name mosdepth -g -o {params.prefix} > {log.std} 2>&1"
 
 
 rule coverage_window_stats:
     input:
-        out_alignment_dir_path / "{sample}/{reads}.coverage.per-base.bed.gz"
+        rules.mosdepth.output.out #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
     output:
-        out_alignment_dir_path / ("{sample}/{reads}_{size}_windows_stats.csv")
+        out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage_{size}_windows_stats.csv")
     params:
-        window_size=lambda wildcards: "{size}".format(size=wildcards.size),
-        prefix=lambda wildcards: out_alignment_dir_path / ("{sample}/{reads}".format(sample = wildcards.sample, reads=wildcards.reads)),
+        window_size=lambda w: "{size}".format(size=w.size),
+        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample)),
     log:
-        std=log_dir_path / "{sample}/{reads}.{size}.coverage_window_stats.log",
-        cluster_log=cluster_log_dir_path / "{sample}/{reads}.{size}.coverage_window_stats.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/{reads}.{size}.coverage_window_stats.cluster.err"
+        std=log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_window_stats.log",
+        cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_window_stats.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_window_stats.cluster.err"
     benchmark:
-         benchmark_dir_path / "{sample}/{reads}.{size}.coverage_window_stats.benchmark.txt"
+         benchmark_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_window_stats.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
-        cpus=config["covarage_stats_threads"],
-        time=config["covarage_stats_time"],
-        mem=config["covarage_stats_mem_mb"],
+        cpus=config["coverage_stats_threads"],
+        time=config["coverage_stats_time"],
+        mem=config["coverage_stats_mem_mb"],
     threads:
-        config["covarage_stats_threads"]
+        config["coverage_stats_threads"]
     shell:
         "coverage_statistics.py -i {input} --tool-name mosdepth -n -f {params.window_size} -o {params.prefix} 2>&1"
 
 
 rule coverage_visualization:
     input:
-        whole_stats=out_alignment_dir_path / "{sample}/{reads}_whole_genome_stats.csv",
-        window_stats=out_alignment_dir_path / ("{sample}/{reads}_{size}_windows_stats.csv"),
-        length=assembly_stats_dir_path / "{sample}.len",
-        whitelist=assembly_stats_dir_path / "{sample}.whitelist",
-        syn=assembly_stats_dir_path / "{sample}.syn",
-        renamelist=assembly_stats_dir_path / "{sample}.renamelist"
+        whole_stats=rules.coverage_whole_genome_stats.output, #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
+        window_stats=rules.coverage_window_stats.output, #out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.coverage_windows_stats.csv"),
+        length=assembly_stats_dir_path / "{assembly}.len",
+        whitelist=assembly_stats_dir_path / "{assembly}.whitelist",
+        syn=assembly_stats_dir_path / "{assembly}.syn",
+        renamelist=assembly_stats_dir_path / "{assembly}.renamelist"
     output:
-        png=out_alignment_dir_path / ("{sample}/{reads}.{size}.track.jet.png"),
-        svg=out_alignment_dir_path / ("{sample}/{reads}.{size}.track.jet.svg")
+        png=out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track.jet.png"),
+        svg=out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track.jet.svg")
     params:
-        prefix=lambda wildcards: out_alignment_dir_path / ("{sample}/{reads}.{size}.track").format(sample=wildcards.sample, reads=wildcards.reads, size=wildcards.size),
-        window_size=lambda wildcards: "{size}".format(size=wildcards.size),
-        label=lambda wildcards: "{sample}/{reads}.{size}".format(sample=wildcards.sample, reads=wildcards.reads, size=wildcards.size),
+        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track").format(assembly=w.assembly, sample=w.sample, size=w.size),
+        window_size=lambda w: "{size}".format(size=w.size),
+        label=lambda w: "{sample}/{assembly}.{sample}.{size}".format(assembly=w.assembly, sample=w.sample, size=w.size),
     log:
-        std=log_dir_path / "{sample}/{reads}.{size}.coverage_visualization.log",
-        cluster_log=cluster_log_dir_path / "{sample}/{reads}.{size}.coverage_visualization.cluster.log",
-        cluster_err=cluster_log_dir_path / "{sample}/{reads}.{size}.coverage_visualization.cluster.err"
+        std=log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_visualization.log",
+        cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_visualization.cluster.log",
+        cluster_err=cluster_log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_visualization.cluster.err"
     benchmark:
-         benchmark_dir_path / "{sample}/{reads}.{size}.coverage_visualization.benchmark.txt"
+         benchmark_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_visualization.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -112,3 +112,5 @@ rule coverage_visualization:
         "-w {params.window_size} -n {input.length} -a {input.whitelist} -z {input.renamelist} "
         "--scaffold_syn_file {input.syn} --syn_file_key_column 0 "
         "--syn_file_value_column 1 --colormap jet > {log.std} 2>&1; "
+
+

@@ -2,9 +2,9 @@ $schema: "http://json-schema.org/draft-04/schema#"
 description: row of the samples.tsv, representing a sequencing unit, i.e. single-end or paired-end data
 type: object
 properties:
-  assembly:
+  sample_id:
     type: string
-    description: assembly name/id the unit has been sequenced from
+    description: sample name/id, would be used in file naming for convenience of results interpretation
   platform:
     type: string
     enum: ["CAPILLARY", "LS454", "ILLUMINA", "SOLID", "HELICOS", "IONTORRENT", "ONT", "PACBIO"]
@@ -15,6 +15,5 @@ properties:
     type: string
     description: reverse reads in PE; path to FASTQ file (leave empty in case of SE)
 required:
-  - assembly
   - platform
   - forward_read
