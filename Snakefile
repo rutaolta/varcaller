@@ -32,7 +32,8 @@ include: "workflow/rules/Preprocessing/assembly_stats.smk"
 
 
 ##### target rules #####
-localrules: all
+localrules: all, create_sample_cluster_log_dirs
+ruleorder: create_sample_cluster_log_dirs > bcftools_vcf_subset
 
 rule all:
     input:
@@ -45,5 +46,12 @@ rule all:
 
         # coverage visualization
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE)
+
+
+rule create_sample_cluster_log_dirs:
+    output:
+        directory(expand(cluster_log_dir_path / "{sample}", sample=SAMPLES.sample_id))
+    shell:
+        "mkdir -p {output}"
 
 

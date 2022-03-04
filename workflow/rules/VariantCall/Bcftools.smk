@@ -1,5 +1,3 @@
-import os
-
 ruleorder: bcftools_filter_indel_snp > bcftools_vcf_subset > bcftools_filter > bcftools_varcall   
 
 
