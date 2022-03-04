@@ -32,26 +32,26 @@ include: "workflow/rules/Preprocessing/assembly_stats.smk"
 
 
 ##### target rules #####
-localrules: all, create_sample_cluster_log_dirs
+localrules: all, create_sample_cluster_log_dirs #, create_subset_out_dirs
+# ruleorder: create_sample_cluster_log_dirs > create_subset_out_dirs > bcftools_vcf_subset
 ruleorder: create_sample_cluster_log_dirs > bcftools_vcf_subset
 
 rule all:
     input:
+        # create dirs for samples to avoid slurm error
+        expand(cluster_log_dir_path / "{sample}", sample=SAMPLES.sample_id),
+
         # alignment
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
         
         # variant calling
-        lambda wildcards: aggregate_file_names(wildcards, str("{subset}/"+ASSEMBLY+".indel.vcf.gz")),
-        lambda wildcards: aggregate_file_names(wildcards, str("{subset}/"+ASSEMBLY+".snp.vcf.gz")),
+        lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.indel.vcf.gz")),
+        lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.snp.vcf.gz")),
 
         # coverage visualization
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE)
 
 
-rule create_sample_cluster_log_dirs:
-    output:
-        directory(expand(cluster_log_dir_path / "{sample}", sample=SAMPLES.sample_id))
-    shell:
-        "mkdir -p {output}"
+
 
 

@@ -29,6 +29,9 @@ validate(SAMPLES, schema="../schemas/samples.schema.yaml")
 # window size for coverage
 SIZE=config["coverage_stats_window_size_list"]
 
+# pattern for files after checkpoint bcftools_vcf_subset
+PATTERN_SUBSET_VCF=str("{subset}/"+ASSEMBLY+".vcf.gz")
+
 
 # def get_fasta(wildcards):
 #     return SAMPLES[SAMPLES["assembly_name"]==wildcards.sample].assembly
@@ -49,5 +52,21 @@ def get_platform(wildcards):
 def aggregate_file_names(wildcards, pattern):
      checkpoint_output = checkpoints.bcftools_vcf_subset.get().output[0]
      return expand(str(pattern),
-                    subset=glob_wildcards(os.path.join(checkpoint_output, "{subset}/"+ASSEMBLY+".vcf.gz")).subset)
+                    assembly=ASSEMBLY,
+                    subset=glob_wildcards(os.path.join(checkpoint_output, PATTERN_SUBSET_VCF)).subset)
+
+
+rule create_sample_cluster_log_dirs:
+    output:
+        directory(expand(cluster_log_dir_path / "{sample}", sample=SAMPLES.sample_id))
+    shell:
+        "mkdir -p {output}"
+
+
+# rule create_subset_out_dirs:
+#     output:
+#         directory(expand(vcf_subset_dir_path / "{sample}", sample=SAMPLES.sample_id))
+#     shell:
+#         "mkdir -p {output}; "
+
 

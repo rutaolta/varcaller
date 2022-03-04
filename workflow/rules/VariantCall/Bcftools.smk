@@ -1,4 +1,5 @@
-ruleorder: bcftools_filter_indel_snp > bcftools_vcf_subset > bcftools_filter > bcftools_varcall   
+# ruleorder: bcftools_vcf_subset > create_subset_out_dirs > bcftools_filter_indel_snp > bcftools_varcall > bcftools_filter
+ruleorder: bcftools_vcf_subset > bcftools_filter_indel_snp > bcftools_varcall > bcftools_filter
 
 
 rule bcftools_varcall:
