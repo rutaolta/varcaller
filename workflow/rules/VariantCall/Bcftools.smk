@@ -118,7 +118,7 @@ rule bcftools_filter_indel_snp:
     threads:
         config["bcftools_filter_indel_snp_threads"]
     shell:
-        "bcftools  filter -i {params.type_indel} -Oz {input.subvcf} > {output.indel} 2> {log.std}; "
-        "bcftools  filter -i {params.type_snp} -Oz {input.subvcf} > {output.snp} 2> {log.std}; "
+        "bcftools  filter -i '{params.type_indel}' -Oz {input.subvcf} > {output.indel} 2> {log.std}; "
+        "bcftools  filter -i '{params.type_snp}' -Oz {input.subvcf} > {output.snp} 2> {log.std}; "
 
 

@@ -30,8 +30,8 @@ bcftools_mpileup_min_MQ: 30
 bcftools_mpileup_min_BQ: 30
 bcftools_filter_soft_filter: "LowQual"
 bcftools_filter_exclude: "QUAL < 20.0 || (FORMAT/SP > 60.0 | FORMAT/DP < 5.0 | FORMAT/GQ < 20.0)"
-bcftools_filter_indel_type: "TYPE='INDEL'"
-bcftools_filter_snp_type: "TYPE='snp'"
+bcftools_filter_indel_type: 'TYPE="indel"'
+bcftools_filter_snp_type: 'TYPE="snp"'
 # visualization
 number_of_chromosomes: 17
 coverage_stats_window_size_list: [1000, 10000]
