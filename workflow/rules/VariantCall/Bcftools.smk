@@ -122,3 +122,34 @@ rule bcftools_filter_indel_snp:
         "bcftools  filter -i '{params.type_snp}' -Oz {input.subvcf} > {output.snp} 2> {log.std}; "
 
 
+rule bcftools_filter_hetero_homo:
+    input:
+        indel=vcf_subset_dir_path / "{subset}/{assembly}.indel.vcf.gz",
+        snp=vcf_subset_dir_path / "{subset}/{assembly}.snp.vcf.gz"
+    output:
+        hetero_indel=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.vcf.gz",
+        homo_indel=vcf_subset_dir_path / "{subset}/{assembly}.indel.homo.vcf.gz",
+        hetero_snp=vcf_subset_dir_path / "{subset}/{assembly}.snp.hetero.vcf.gz",
+        homo_snp=vcf_subset_dir_path / "{subset}/{assembly}.snp.homo.vcf.gz"
+    params:
+        type_hetero=config["bcftools_filter_hetero_type"],
+        type_homo=config["bcftools_filter_homo_type"]
+    log:
+        std=log_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.log",
+        cluster_log=cluster_log_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.cluster.log",
+        cluster_err=cluster_log_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.cluster.err"
+    benchmark:
+        benchmark_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.benchmark.txt"
+    conda:
+        "../../../%s" % config["conda_config"]
+    resources:
+        cpus=config["bcftools_filter_hetero_homo_threads"],
+        mem=config["bcftools_filter_hetero_homo_mem_mb"],
+        time=config["bcftools_filter_hetero_homo_time"]
+    threads:
+        config["bcftools_filter_hetero_homo_threads"]
+    shell:
+        "bcftools filter -i {params.type_hetero} -Oz {input.indel} > {output.hetero_indel} 2> {log.std}; "
+        "bcftools filter -i {params.type_hetero} -Oz {input.snp} > {output.hetero_snp} 2> {log.std}; "
+        "bcftools filter -i {params.type_homo} -Oz {input.indel} > {output.homo_indel} 2> {log.std}; "
+        "bcftools filter -i {params.type_homo} -Oz {input.snp} > {output.homo_snp} 2> {log.std} "
