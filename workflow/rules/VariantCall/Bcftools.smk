@@ -149,7 +149,7 @@ rule bcftools_filter_hetero_homo:
     threads:
         config["bcftools_filter_hetero_homo_threads"]
     shell:
-        "bcftools filter -i {params.type_hetero} -Oz {input.indel} > {output.hetero_indel} 2> {log.std}; "
-        "bcftools filter -i {params.type_hetero} -Oz {input.snp} > {output.hetero_snp} 2> {log.std}; "
-        "bcftools filter -i {params.type_homo} -Oz {input.indel} > {output.homo_indel} 2> {log.std}; "
-        "bcftools filter -i {params.type_homo} -Oz {input.snp} > {output.homo_snp} 2> {log.std}; "
+        "bcftools filter -i '{params.type_hetero}' -Oz {input.indel} > {output.hetero_indel} 2> {log.std}; "
+        "bcftools filter -i '{params.type_hetero}' -Oz {input.snp} > {output.hetero_snp} 2> {log.std}; "
+        "bcftools filter -i '{params.type_homo}' -Oz {input.indel} > {output.homo_indel} 2> {log.std}; "
+        "bcftools filter -i '{params.type_homo}' -Oz {input.snp} > {output.homo_snp} 2> {log.std}; "
