@@ -8,13 +8,13 @@ rule draw_variant_window_densities:
         syn=assembly_stats_dir_path / "{assembly}.syn",
         renamelist=assembly_stats_dir_path / "{assembly}.renamelist"
     output:
-        hetero_indel_png=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.jet.png ",
-        hetero_indel_svg=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.jet.svg ",
-        hetero_indel_scaffolds_absent_in_reference=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.scaffolds_absent_in_reference.ids ",
-        hetero_indel_scaffolds_absent_in_vcf=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.scaffolds_absent_in_vcf.ids ",
-        hetero_indel_short_scaffolds=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.short_scaffolds.ids ",
-        hetero_indel_variant_counts_stats=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.variant_counts.stats ",
-        hetero_indel_variant_counts_tsv=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.variant_counts.tsv "
+        hetero_indel_png=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.jet.png",
+        hetero_indel_svg=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.jet.svg",
+        hetero_indel_scaffolds_absent_in_reference=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.scaffolds_absent_in_reference.ids",
+        hetero_indel_scaffolds_absent_in_vcf=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.scaffolds_absent_in_vcf.ids",
+        hetero_indel_short_scaffolds=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.short_scaffolds.ids",
+        hetero_indel_variant_counts_stats=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.variant_counts.stats",
+        hetero_indel_variant_counts_tsv=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.variant_counts.tsv"
     params:
         hetero_indel_prefix=lambda w: vcf_subset_dir_path / ("{subset}/{assembly}.indel.hetero").format(assembly=w.assembly, subset=w.subset),
         homo_indel_prefix=lambda w: vcf_subset_dir_path / ("{subset}/{assembly}.indel.homo").format(assembly=w.assembly, subset=w.subset),
@@ -26,11 +26,11 @@ rule draw_variant_window_densities:
         syn_file_key_column=config["syn_file_key_column"],
         syn_file_value_column=config["syn_file_value_column"]
     log:
-        std=log_dir_path / "{subset}/{assembly}.draw_variant_window_densities.log",
-        cluster_log=cluster_log_dir_path / "{subset}/{assembly}.draw_variant_window_densities.cluster.log",
-        cluster_err=cluster_log_dir_path / "{subset}/{assembly}.draw_variant_window_densities.cluster.err"
+        std=log_dir_path / "{subset}/{assembly}.{size_and_step}.draw_variant_window_densities.log",
+        cluster_log=cluster_log_dir_path / "{subset}/{assembly}.{size_and_step}.draw_variant_window_densities.cluster.log",
+        cluster_err=cluster_log_dir_path / "{subset}/{assembly}.{size_and_step}.draw_variant_window_densities.cluster.err"
     benchmark:
-        benchmark_dir_path / "{subset}/{assembly}.draw_variant_window_densities.benchmark.txt"
+        benchmark_dir_path / "{subset}/{assembly}.{size_and_step}.draw_variant_window_densities.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:

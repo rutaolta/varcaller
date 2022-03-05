@@ -52,10 +52,10 @@ def get_platform(wildcards):
     return SAMPLES[SAMPLES["sample"]==wildcards.sample].platform
 
 
-def aggregate_file_names(wildcards, pattern):
+def aggregate_file_names(pattern, **wildcards):
      checkpoint_output = checkpoints.bcftools_vcf_subset.get().output[0]
      return expand(str(pattern),
-                    assembly=ASSEMBLY,
+                    **wildcards,
                     subset=glob_wildcards(os.path.join(checkpoint_output, PATTERN_SUBSET_VCF)).subset)
 
 
