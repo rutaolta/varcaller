@@ -32,8 +32,8 @@ bcftools_filter_soft_filter: "LowQual"
 bcftools_filter_exclude: "QUAL < 20.0 || (FORMAT/SP > 60.0 | FORMAT/DP < 5.0 | FORMAT/GQ < 20.0)"
 bcftools_filter_indel_type: 'TYPE="indel"'
 bcftools_filter_snp_type: 'TYPE="snp"'
-bcftools_filter_hetero_type: 'FMT/GT = "het"'
-bcftools_filter_homo_type: 'FMT/GT = "hom"'
+bcftools_filter_hetero_type: 'FMT/GT="het"'
+bcftools_filter_homo_type: 'FMT/GT="hom"'
 # visualization
 number_of_chromosomes: 17
 coverage_stats_window_size_list: [1000, 10000]
