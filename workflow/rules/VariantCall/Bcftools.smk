@@ -1,5 +1,5 @@
 # ruleorder: bcftools_vcf_subset > create_subset_out_dirs > bcftools_filter_indel_snp > bcftools_varcall > bcftools_filter
-ruleorder: bcftools_vcf_subset > bcftools_filter_indel_snp > bcftools_varcall > bcftools_filter
+ruleorder: bcftools_vcf_subset > bcftools_filter_hetero_homo > bcftools_filter_indel_snp > bcftools_varcall > bcftools_filter
 
 
 rule bcftools_varcall:
@@ -98,17 +98,15 @@ rule bcftools_filter_indel_snp:
     input:
         subvcf=vcf_subset_dir_path / "{subset}/{assembly}.vcf.gz"
     output:
-        indel=vcf_subset_dir_path / "{subset}/{assembly}.indel.vcf.gz",
-        snp=vcf_subset_dir_path / "{subset}/{assembly}.snp.vcf.gz"
+        var_vcf=vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.vcf.gz"
     params:
-        type_indel=config["bcftools_filter_indel_type"],
-        type_snp=config["bcftools_filter_snp_type"]
+        variance_type=lambda w: config["bcftools_filter_variance_type"].format(var_type=w.var_type)
     log:
-        std=log_dir_path / "{subset}/{assembly}.bcftools_filter_indel_snp.log",
-        cluster_log=cluster_log_dir_path / "{subset}/{assembly}.bcftools_filter_indel_snp.cluster.log",
-        cluster_err=cluster_log_dir_path / "{subset}/{assembly}.bcftools_filter_indel_snp.cluster.err"
+        std=log_dir_path / "{subset}/{assembly}.{var_type}.bcftools_filter_indel_snp.log",
+        cluster_log=cluster_log_dir_path / "{subset}/{assembly}.{var_type}.bcftools_filter_indel_snp.cluster.log",
+        cluster_err=cluster_log_dir_path / "{subset}/{assembly}.{var_type}.bcftools_filter_indel_snp.cluster.err"
     benchmark:
-        benchmark_dir_path / "{subset}/{assembly}.bcftools_filter_indel_snp.benchmark.txt"
+        benchmark_dir_path / "{subset}/{assembly}.{var_type}.bcftools_filter_indel_snp.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -118,28 +116,22 @@ rule bcftools_filter_indel_snp:
     threads:
         config["bcftools_filter_indel_snp_threads"]
     shell:
-        "bcftools  filter -i '{params.type_indel}' -Oz {input.subvcf} > {output.indel} 2> {log.std}; "
-        "bcftools  filter -i '{params.type_snp}' -Oz {input.subvcf} > {output.snp} 2> {log.std}; "
+        "bcftools  filter -i '{params.variance_type}' -Oz {input.subvcf} > {output.var_vcf} 2> {log.std}; "
 
 
 rule bcftools_filter_hetero_homo:
     input:
-        indel=vcf_subset_dir_path / "{subset}/{assembly}.indel.vcf.gz",
-        snp=vcf_subset_dir_path / "{subset}/{assembly}.snp.vcf.gz"
+        var_vcf=rules.bcftools_filter_indel_snp.output.var_vcf
     output:
-        hetero_indel=vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.vcf.gz",
-        homo_indel=vcf_subset_dir_path / "{subset}/{assembly}.indel.homo.vcf.gz",
-        hetero_snp=vcf_subset_dir_path / "{subset}/{assembly}.snp.hetero.vcf.gz",
-        homo_snp=vcf_subset_dir_path / "{subset}/{assembly}.snp.homo.vcf.gz"
+        var_zyg_vcf=vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.vcf.gz"
     params:
-        type_hetero=config["bcftools_filter_hetero_type"],
-        type_homo=config["bcftools_filter_homo_type"]
+        zygosity_type=lambda w: config["bcftools_filter_zygosity_type"].format(zygosity=w.zygosity)
     log:
-        std=log_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.log",
-        cluster_log=cluster_log_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.cluster.log",
-        cluster_err=cluster_log_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.cluster.err"
+        std=log_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.bcftools_filter_hetero_homo.log",
+        cluster_log=cluster_log_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.bcftools_filter_hetero_homo.cluster.log",
+        cluster_err=cluster_log_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.bcftools_filter_hetero_homo.cluster.err"
     benchmark:
-        benchmark_dir_path / "{subset}/{assembly}.bcftools_filter_hetero_homo.benchmark.txt"
+        benchmark_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.bcftools_filter_hetero_homo.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
@@ -149,7 +141,4 @@ rule bcftools_filter_hetero_homo:
     threads:
         config["bcftools_filter_hetero_homo_threads"]
     shell:
-        "bcftools filter -i '{params.type_hetero}' -Oz {input.indel} > {output.hetero_indel} 2> {log.std}; "
-        "bcftools filter -i '{params.type_hetero}' -Oz {input.snp} > {output.hetero_snp} 2> {log.std}; "
-        "bcftools filter -i '{params.type_homo}' -Oz {input.indel} > {output.homo_indel} 2> {log.std}; "
-        "bcftools filter -i '{params.type_homo}' -Oz {input.snp} > {output.homo_snp} 2> {log.std}; "
+        "bcftools filter -i '{params.zygosity_type}' -Oz {input.var_vcf} > {output.var_zyg_vcf} 2> {log.std}; "

@@ -32,6 +32,12 @@ SIZE=config["coverage_stats_window_size_list"]
 # draw densities
 SIZE_AND_STEP=config["window_size_and_step_list"]
 
+# type of genetic variation
+VAR_TYPE=['snp','indel']
+
+# zygosity
+ZYGOSITY=['het','hom']
+
 # pattern for files after checkpoint bcftools_vcf_subset
 PATTERN_SUBSET_VCF=str("{subset}/"+ASSEMBLY+".vcf.gz")
 

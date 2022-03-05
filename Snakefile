@@ -46,16 +46,12 @@ rule all:
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
 
         # variant calling
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.indel.vcf.gz"), assembly=ASSEMBLY),
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.snp.vcf.gz"), assembly=ASSEMBLY),
-
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.vcf.gz"), assembly=ASSEMBLY),
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.indel.homo.vcf.gz"), assembly=ASSEMBLY),
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.snp.hetero.vcf.gz"), assembly=ASSEMBLY),
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.snp.homo.vcf.gz"), assembly=ASSEMBLY),
-
-        # coverage visualization
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.jet.png"), assembly=ASSEMBLY, size_and_step=SIZE)
+        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.vcf.gz"), assembly=ASSEMBLY, var_type=VAR_TYPE),
+        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.vcf.gz"), assembly=ASSEMBLY, var_type=VAR_TYPE, zygosity=ZYGOSITY),
 
         # draw densities
-        expand(vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.jet.png", assembly=ASSEMBLY, subset=glob_wildcards(os.path.join(checkpoint_output, PATTERN_SUBSET_VCF)).subset, size_and_step=SIZE_AND_STEP)
+        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.{size_and_step}.jet.png"), assembly=ASSEMBLY, var_type=VAR_TYPE, zygosity=ZYGOSITY, size_and_step=SIZE_AND_STEP),
+
+        # coverage visualization
+        expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE)
+
