@@ -43,15 +43,15 @@ rule all:
 
         # alignment
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
-        
+
         # variant calling
         lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.indel.vcf.gz")),
         lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.snp.vcf.gz")),
 
+        lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.vcf.gz")),
+        lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.indel.homo.vcf.gz")),
+        lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.snp.hetero.vcf.gz")),
+        lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.snp.homo.vcf.gz")),
+
         # coverage visualization
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE)
-
-
-
-
-

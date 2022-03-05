@@ -32,6 +32,8 @@ bcftools_filter_soft_filter: "LowQual"
 bcftools_filter_exclude: "QUAL < 20.0 || (FORMAT/SP > 60.0 | FORMAT/DP < 5.0 | FORMAT/GQ < 20.0)"
 bcftools_filter_indel_type: 'TYPE="indel"'
 bcftools_filter_snp_type: 'TYPE="snp"'
+bcftools_filter_hetero_type: 'FMT/GT="het"'
+bcftools_filter_homo_type: 'FMT/GT="hom"'
 # visualization
 number_of_chromosomes: 17
 coverage_stats_window_size_list: [1000, 10000]
@@ -50,8 +52,9 @@ coverage_stats_threads: 1
 coverage_visualization_threads: 4
 bcftools_varcall_threads: 32
 bcftools_filter_threads: 10
-bcftools_vcf_subset_threads: 2
-bcftools_filter_indel_snp_threads: 2
+bcftools_vcf_subset_threads: 10
+bcftools_filter_indel_snp_threads: 10
+bcftools_filter_hetero_homo_threads: 10
 
 #---- Time ----
 samtools_faidx_time: "10:00:00"
@@ -65,6 +68,7 @@ bcftools_varcall_time: "100:00:00"
 bcftools_filter_time: "80:00:00"
 bcftools_vcf_subset_time: "80:00:00"
 bcftools_filter_indel_snp_time: "80:00:00"
+bcftools_filter_hetero_homo_time: "80:00:00"
 
 #---- Memory ----
 # suppl
@@ -83,3 +87,4 @@ bcftools_varcall_mem_mb: 100000
 bcftools_filter_mem_mb: 40000
 bcftools_vcf_subset_mem_mb: 40000
 bcftools_filter_indel_snp_mem_mb: 50000
+bcftools_filter_hetero_homo_mem_mb: 50000
