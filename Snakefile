@@ -53,5 +53,8 @@ rule all:
         lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.snp.hetero.vcf.gz")),
         lambda wildcards: aggregate_file_names(wildcards, str(vcf_subset_dir_path / "{subset}/{assembly}.snp.homo.vcf.gz")),
 
+        # draw densities
+        expand(vcf_subset_dir_path / "{subset}/{assembly}.indel.hetero.{size_and_step}.jet.png", assembly=ASSEMBLY, subset=glob_wildcards(os.path.join(checkpoint_output, PATTERN_SUBSET_VCF)).subset, size_and_step=SIZE_AND_STEP)
+
         # coverage visualization
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE)

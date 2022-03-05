@@ -29,6 +29,9 @@ validate(SAMPLES, schema="../schemas/samples.schema.yaml")
 # window size for coverage
 SIZE=config["coverage_stats_window_size_list"]
 
+# draw densities
+SIZE_AND_STEP=config["window_size_and_step_list"]
+
 # pattern for files after checkpoint bcftools_vcf_subset
 PATTERN_SUBSET_VCF=str("{subset}/"+ASSEMBLY+".vcf.gz")
 
@@ -68,5 +71,3 @@ rule create_sample_cluster_log_dirs:
 #         directory(expand(vcf_subset_dir_path / "{sample}", sample=SAMPLES.sample_id))
 #     shell:
 #         "mkdir -p {output}; "
-
-
