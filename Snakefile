@@ -53,5 +53,8 @@ rule all:
         lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.{size_and_step}.jet.png"), assembly=ASSEMBLY, var_type=VAR_TYPE, zygosity=ZYGOSITY, size_and_step=SIZE_AND_STEP),
 
         # coverage visualization
-        expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE)
+        expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE),
+
+        # pseudoautosomal region
+        expand(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=min(config["coverage_stats_window_size_list"]))
 

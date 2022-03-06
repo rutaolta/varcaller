@@ -54,6 +54,7 @@ index_bam_threads: 8
 mosdepth_threads: 16
 coverage_stats_threads: 1
 coverage_visualization_threads: 4
+pseudoautosomal_region_threads: 1
 bcftools_varcall_threads: 32
 bcftools_filter_threads: 10
 bcftools_vcf_subset_threads: 10
@@ -69,6 +70,7 @@ index_bam_time: "12:00:00"
 mosdepth_time: "12:00:00"
 coverage_stats_time: "80:00:00"
 coverage_visualization_time: "5:00:00"
+pseudoautosomal_region_time: "2:00:00"
 bcftools_varcall_time: "100:00:00"
 bcftools_filter_time: "80:00:00"
 bcftools_vcf_subset_time: "80:00:00"
@@ -89,6 +91,7 @@ index_bam_mem_mb: 10000
 mosdepth_mem_mb: 10000
 coverage_stats_mem_mb: 20000
 coverage_visualization_mem_mb: 20000
+pseudoautosomal_region_mem_mb: 5000
 bcftools_varcall_mem_mb: 100000
 bcftools_filter_mem_mb: 40000
 bcftools_vcf_subset_mem_mb: 40000
