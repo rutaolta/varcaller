@@ -38,7 +38,7 @@ coverage_stats_window_size_list: [1000, 10000]
 # draw densities
 density_thresholds: "0.00,0.10,0.50,1.00,1.50,2.00,2.50,3.00,3.50,4.00"
 subplots_adjust_left: "0.25"
-window_size_and_step_list: [100000, 1000000]
+window_size_and_step_list: [1000, 10000]
 syn_file_key_column: "0"
 syn_file_value_column: "1"
 
