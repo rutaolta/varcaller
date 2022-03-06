@@ -27,6 +27,7 @@ include: "workflow/rules/common.smk"
 
 include: "workflow/rules/Alignment/alignment.smk"
 include: "workflow/rules/Alignment/coverage.smk"
+include: "workflow/rules/Alignment/pseudoautosomal_region.smk"
 include: "workflow/rules/VariantCall/Bcftools.smk"
 include: "workflow/rules/VariantCall/Draw_densities.smk"
 include: "workflow/rules/Preprocessing/assembly_stats.smk"
