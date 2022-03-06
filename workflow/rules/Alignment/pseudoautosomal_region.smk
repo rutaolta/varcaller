@@ -7,9 +7,9 @@ rule pseudoautosomal_region:
         chrscaf=temp(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_chrscaf.csv")
     params:
         outdir=out_alignment_dir_path / "{sample}/PAR",
-        prefix=lambda w: out_alignment_dir_path / ("{sample}/PAR/{assembly}.{sample}.{par_size}").format(assembly=w.assembly, sample=w.sample, par_size=min(config["coverage_stats_window_size_list"])),
+        prefix=lambda w: out_alignment_dir_path / ("{sample}/PAR/{assembly}.{sample}.{par_size}").format(assembly=w.assembly, sample=w.sample, par_size=PAR_SIZE),
+        par_window_size=PAR_SIZE,
         scaffold_name="chrIV",
-        par_window_size=min(config["coverage_stats_window_size_list"])
     log:
         std=log_dir_path / "{sample}/{assembly}.{sample}.{par_size}.pseudoautosomal_region.log",
         cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.{par_size}.pseudoautosomal_region.cluster.log",

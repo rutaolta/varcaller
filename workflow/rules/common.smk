@@ -29,6 +29,9 @@ validate(SAMPLES, schema="../schemas/samples.schema.yaml")
 # window size for coverage
 SIZE=config["coverage_stats_window_size_list"]
 
+# window size for PAR determining
+PAR_SIZE=min(config["coverage_stats_window_size_list"])
+
 # draw densities
 SIZE_AND_STEP=config["window_size_and_step_list"]
 
