@@ -57,6 +57,5 @@ rule all:
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE),
 
         # ploidy.file
-        expand(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=PAR_SIZE),
         varcall_dir_path / "{assembly}.ploidy.file"
 
