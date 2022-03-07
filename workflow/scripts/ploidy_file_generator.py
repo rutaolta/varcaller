@@ -25,7 +25,6 @@ def get_PAR_coordinates(*bed_files) -> dict:
     stop_coordinate = round(mean(all_stop_coordinates)) + 1
     return (chr_name, start_coordinate, stop_coordinate)
 
-
 def get_sex_chromosome_length(lenfile, chr_name):
     with open(lenfile, 'r') as f:
         for line in f:
@@ -34,7 +33,6 @@ def get_sex_chromosome_length(lenfile, chr_name):
                 sex_chromosome_length = int(line[1])
                 break
     return sex_chromosome_length
-
 
 def main():
     # get start and stop coordinates (mean values will be returned if they differ)

@@ -5,8 +5,8 @@ ruleorder: bcftools_vcf_subset > bcftools_filter_hetero_homo > bcftools_filter_i
 rule bcftools_varcall:
     input:
         assembly=FASTA,
-        samples=expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
-        indexes=expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id)
+        samples=expand(alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
+        indexes=expand(alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id)
     output:
         mpileup=varcall_dir_path / (ASSEMBLY + ".mpileup.vcf.gz"),
         call=varcall_dir_path / (ASSEMBLY + ".vcf.gz")

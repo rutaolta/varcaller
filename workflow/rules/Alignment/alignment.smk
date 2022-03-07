@@ -2,9 +2,9 @@ rule bwa_index:
     input:
         assembly=FASTA
     output:
-        idx=multiext(str(out_index_dir_path) + "/{assembly}", ".amb", ".ann", ".bwt", ".pac", ".sa")
+        idx=multiext(str(index_dir_path) + "/{assembly}", ".amb", ".ann", ".bwt", ".pac", ".sa")
     params:
-        prefix=out_index_dir_path / ASSEMBLY
+        prefix=index_dir_path / ASSEMBLY
     log:
         log=log_dir_path / "{assembly}/bwa_index.log",
         cluster_log=cluster_log_dir_path / "{assembly}/bwa_map.cluster.log",
@@ -30,7 +30,7 @@ rule bwa_map:
         assembly=FASTA,
         idx=rules.bwa_index.output.idx
     output:
-        bam=out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam"
+        bam=alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam"
     params:
         bwa_threads=config["bwa_mem_threads"],
         fixmate_threads=config["samtools_fixmate_threads"],
@@ -38,7 +38,7 @@ rule bwa_map:
         markdup_threads=config["samtools_markdup_threads"],
         per_thread_sort_mem="%sG" % config["bwa_map_per_thread_mem_mb"],
         sort_prefix=lambda wildcards, output: output["bam"][:-4],
-        idx_prefix=out_index_dir_path / ASSEMBLY
+        idx_prefix=index_dir_path / ASSEMBLY
     log:
         bwa_mem=log_dir_path / "{sample}/{assembly}.{sample}.bwa_mem.log",
         samtools_fixmate=log_dir_path / "{sample}/{assembly}.{sample}.samtools_fixmate.log",
@@ -68,7 +68,7 @@ rule index_bam:
     input:
         rules.bwa_map.output.bam
     output:
-        bai=out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai"
+        bai=alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai"
     log:
         std=log_dir_path / "{sample}/{assembly}.{sample}.index_bam.log",
         cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.index_bam.cluster.log",

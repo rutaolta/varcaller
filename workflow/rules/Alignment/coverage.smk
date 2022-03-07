@@ -3,10 +3,10 @@ rule mosdepth:
         bam=rules.bwa_map.output.bam,
         bai=rules.index_bam.output.bai
     output:
-        out=out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
+        out=alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
     params:
         min_mapping_quality=config["min_mapping_quality"],
-        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample))
+        prefix=lambda w: alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample))
     log:
         std=log_dir_path / "{sample}/{assembly}.{sample}.mosdepth.log",
         cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.mosdepth.cluster.log",
@@ -26,9 +26,9 @@ rule mosdepth:
 
 rule coverage_whole_genome_stats:
     input:
-        rules.mosdepth.output.out #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
+        rules.mosdepth.output.out #alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
     output:
-        out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv"
+        alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv"
     params:
         prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample))
     log:
@@ -51,12 +51,12 @@ rule coverage_whole_genome_stats:
 
 rule coverage_window_stats:
     input:
-        rules.mosdepth.output.out #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
+        rules.mosdepth.output.out #alignment_dir_path / "{sample}/{assembly}.{sample}.coverage.per-base.bed.gz"
     output:
-        out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage_{size}_windows_stats.csv")
+        alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage_{size}_windows_stats.csv")
     params:
         window_size=lambda w: "{size}".format(size=w.size),
-        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample)),
+        prefix=lambda w: alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample)),
     log:
         std=log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_window_stats.log",
         cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.{size}.coverage_window_stats.cluster.log",
@@ -77,17 +77,17 @@ rule coverage_window_stats:
 
 rule coverage_visualization:
     input:
-        whole_stats=rules.coverage_whole_genome_stats.output, #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
-        window_stats=rules.coverage_window_stats.output, #out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.coverage_windows_stats.csv"),
+        whole_stats=rules.coverage_whole_genome_stats.output, #alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
+        window_stats=rules.coverage_window_stats.output, #alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.coverage_windows_stats.csv"),
         length=assembly_stats_dir_path / "{assembly}.len",
         whitelist=assembly_stats_dir_path / "{assembly}.whitelist",
         syn=assembly_stats_dir_path / "{assembly}.syn",
         renamelist=assembly_stats_dir_path / "{assembly}.renamelist"
     output:
-        png=out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track.jet.png"),
-        svg=out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track.jet.svg")
+        png=alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track.jet.png"),
+        svg=alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track.jet.svg")
     params:
-        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track").format(assembly=w.assembly, sample=w.sample, size=w.size),
+        prefix=lambda w: alignment_dir_path / ("{sample}/{assembly}.{sample}.{size}.track").format(assembly=w.assembly, sample=w.sample, size=w.size),
         window_size=lambda w: "{size}".format(size=w.size),
         label=lambda w: "{sample}/{assembly}.{sample}.{size}".format(assembly=w.assembly, sample=w.sample, size=w.size),
     log:

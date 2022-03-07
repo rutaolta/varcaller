@@ -10,8 +10,8 @@ configfile: "config/config.yaml"
 
 # output dirs
 assembly_stats_dir_path = Path(config["assembly_stats_dir"])
-out_index_dir_path = Path(config["out_index_dir"])
-out_alignment_dir_path = Path(config["out_alignment_dir"])
+index_dir_path = Path(config["out_index_dir"])
+alignment_dir_path = Path(config["out_alignment_dir"])
 varcall_dir_path = Path(config["varcall_dir"])
 vcf_subset_dir_path = Path(config["vcf_subset_dir"])
 # technical dirs
@@ -44,7 +44,7 @@ rule all:
         expand(cluster_log_dir_path / "{sample}", sample=SAMPLES.sample_id),
 
         # alignment
-        expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
+        expand(alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
 
         # variant calling
         lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.vcf.gz"), assembly=ASSEMBLY, var_type=VAR_TYPE),
@@ -54,9 +54,9 @@ rule all:
         lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.{size_and_step}.jet.png"), assembly=ASSEMBLY, var_type=VAR_TYPE, zygosity=ZYGOSITY, size_and_step=SIZE_AND_STEP),
 
         # coverage visualization
-        expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE),
+        expand(alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE),
 
         # ploidy.file and samples.file
-        expand(varcall_dir_path / "{assembly}.ploidy.file", assembly=ASSEMBLY),
-        expand(varcall_dir_path / "{assembly}.samples.file", assembly=ASSEMBLY)
+        expand(assembly_stats_dir_path / "{assembly}.ploidy.file", assembly=ASSEMBLY),
+        expand(assembly_stats_dir_path / "{assembly}.samples.file", assembly=ASSEMBLY)
 
