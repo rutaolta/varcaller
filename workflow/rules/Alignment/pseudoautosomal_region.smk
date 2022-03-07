@@ -39,11 +39,11 @@ rule ploidy_file:
     output:
         varcall_dir_path / "ploidy.file"
     log:
-        std=log_dir_path / ploidy_file.log",
-        cluster_log=cluster_log_dir_path / ploidy_file.cluster.log",
-        cluster_err=cluster_log_dir_path / ploidy_file.cluster.err"
+        std=log_dir_path / "ploidy_file.log",
+        cluster_log=cluster_log_dir_path / "ploidy_file.cluster.log",
+        cluster_err=cluster_log_dir_path / "ploidy_file.cluster.err"
     benchmark:
-         benchmark_dir_path / ploidy_file.benchmark.txt"
+         benchmark_dir_path / "ploidy_file.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
