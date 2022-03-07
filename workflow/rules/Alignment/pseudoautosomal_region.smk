@@ -1,3 +1,5 @@
+ruleorder: pseudoautosomal_region > ploidy_file
+
 rule pseudoautosomal_region:
     input:
         whole_stats=rules.coverage_whole_genome_stats.output, #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
