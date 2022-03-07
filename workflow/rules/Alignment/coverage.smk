@@ -30,7 +30,7 @@ rule coverage_whole_genome_stats:
     output:
         alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv"
     params:
-        prefix=lambda w: out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample))
+        prefix=lambda w: alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage".format(assembly = w.assembly, sample=w.sample))
     log:
         std=log_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.log",
         cluster_log=cluster_log_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.cluster.log",
