@@ -37,13 +37,13 @@ rule ploidy_file:
         beds=expand(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=PAR_SIZE),
         lenfile=assembly_stats_dir_path / "{assembly}.len"
     output:
-        varcall_dir_path / "ploidy.file"
+        varcall_dir_path / "{assembly}.ploidy.file"
     log:
-        std=log_dir_path / "ploidy_file.log",
-        cluster_log=cluster_log_dir_path / "ploidy_file.cluster.log",
-        cluster_err=cluster_log_dir_path / "ploidy_file.cluster.err"
+        std=log_dir_path / "{assembly}.ploidy_file.log",
+        cluster_log=cluster_log_dir_path / "{assembly}.ploidy_file.cluster.log",
+        cluster_err=cluster_log_dir_path / "{assembly}.ploidy_file.cluster.err"
     benchmark:
-         benchmark_dir_path / "ploidy_file.benchmark.txt"
+         benchmark_dir_path / "{assembly}.ploidy_file.benchmark.txt"
     conda:
         "../../../%s" % config["conda_config"]
     resources:
