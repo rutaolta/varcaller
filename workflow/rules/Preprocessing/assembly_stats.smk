@@ -26,12 +26,12 @@ rule assembly_stats:
     input:
         assembly_stats_dir_path / "{assembly}.fai"
     output:
-        length=assembly_stats_dir_path / "{assembly}.len",
+        lenfile=assembly_stats_dir_path / "{assembly}.len",
         whitelist=assembly_stats_dir_path / "{assembly}.whitelist",
         syn=assembly_stats_dir_path / "{assembly}.syn",
         renamelist=assembly_stats_dir_path / "{assembly}.renamelist"
     params:
-        prefix=lambda wildcards, output: output["length"][:-4],
+        prefix=lambda wildcards, output: output["lenfile"][:-4],
         chr_number=config["number_of_chromosomes"]
     log:
         std=log_dir_path / "{assembly}/assembly_stats.log",
