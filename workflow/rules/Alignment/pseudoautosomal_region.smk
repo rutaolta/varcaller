@@ -1,13 +1,13 @@
 rule pseudoautosomal_region:
     input:
         whole_stats=rules.coverage_whole_genome_stats.output, #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
-        window_stats=out_alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage_{par_size}_windows_stats.csv")
+        window_stats=alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage_{par_size}_windows_stats.csv")
     output:
-        bed=out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed",
+        bed=alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed",
         chrscaf=temp(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_chrscaf.csv")
     params:
-        outdir=out_alignment_dir_path / "{sample}/PAR",
-        prefix=lambda w: out_alignment_dir_path / ("{sample}/PAR/{assembly}.{sample}.{par_size}").format(assembly=w.assembly, sample=w.sample, par_size=PAR_SIZE),
+        outdir=alignment_dir_path / "{sample}/PAR",
+        prefix=lambda w: alignment_dir_path / ("{sample}/PAR/{assembly}.{sample}.{par_size}").format(assembly=w.assembly, sample=w.sample, par_size=PAR_SIZE),
         scaffold_name=config["sex_scaffold_name"],
         par_window_size=PAR_SIZE
     log:
@@ -34,7 +34,7 @@ rule pseudoautosomal_region:
 
 rule ploidy_file:
     input:
-        beds=expand(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", zip, assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=PAR_SIZE),
+        beds=expand(alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", zip, assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=PAR_SIZE),
         lenfile=assembly_stats_dir_path / "{assembly}.len"
     output:
         assembly_stats_dir_path / "{assembly}.ploidy.file"
