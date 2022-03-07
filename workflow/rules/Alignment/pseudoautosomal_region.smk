@@ -37,7 +37,7 @@ rule ploidy_file:
         beds=expand(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", zip, assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=PAR_SIZE),
         lenfile=assembly_stats_dir_path / "{assembly}.len"
     output:
-        varcall_dir_path / "{assembly}.ploidy.file"
+        assembly_stats_dir_path / "{assembly}.ploidy.file"
     log:
         std=log_dir_path / "{assembly}.ploidy_file.log",
         cluster_log=cluster_log_dir_path / "{assembly}.ploidy_file.cluster.log",
@@ -60,7 +60,7 @@ rule samples_file:
     input:
         config["samples"] # samples.tsv file
     output:
-        varcall_dir_path / "{assembly}.samples.file"
+        assembly_stats_dir_path / "{assembly}.samples.file"
     log:
         std=log_dir_path / "{assembly}.samples_file.log",
         cluster_log=cluster_log_dir_path / "{assembly}.samples_file.cluster.log",
