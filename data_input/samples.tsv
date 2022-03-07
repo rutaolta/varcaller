@@ -1,3 +1,3 @@
-sample_id	platform	forward_read	reverse_read
-sample1	ILLUMINA	data_input/test_reads/sample1/sample1_1.fq.gz	data_input/test_reads/sample1/sample1_2.fq.gz
-	ILLUMINA	data_input/test_reads/sample2/sample2_1.fastq.gz	data_input/test_reads/sample2/sample2_2.fastq.gz
+sample_id	sex	platform	forward_read	reverse_read
+sample1	M	ILLUMINA	data_input/test_reads/sample1/sample1_1.fq.gz	data_input/test_reads/sample1/sample1_2.fq.gz
+sample2	F	ILLUMINA	data_input/test_reads/sample2/sample2_1.fastq.gz	data_input/test_reads/sample2/sample2_2.fastq.gz
