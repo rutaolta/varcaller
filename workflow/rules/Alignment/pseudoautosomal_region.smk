@@ -1,10 +1,10 @@
 rule pseudoautosomal_region:
     input:
-        whole_stats=rules.coverage_whole_genome_stats.output, #out_alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
+        whole_stats=rules.coverage_whole_genome_stats.output, #alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
         window_stats=alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage_{par_size}_windows_stats.csv")
     output:
         bed=alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed",
-        chrscaf=temp(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_chrscaf.csv")
+        chrscaf=temp(alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_chrscaf.csv")
     params:
         outdir=alignment_dir_path / "{sample}/PAR",
         prefix=lambda w: alignment_dir_path / ("{sample}/PAR/{assembly}.{sample}.{par_size}").format(assembly=w.assembly, sample=w.sample, par_size=PAR_SIZE),
