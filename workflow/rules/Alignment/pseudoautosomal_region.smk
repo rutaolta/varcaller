@@ -54,3 +54,26 @@ rule ploidy_file:
         config["pseudoautosomal_region_threads"]
     shell:
         "workflow/scripts/ploidy_file_generator.py --input {input.beds} --lenfile {input.lenfile} -o {output} > {log.std} 2>&1"
+
+
+rule samples_file:
+    input:
+        config["samples"] # samples.tsv file
+    output:
+        varcall_dir_path / "{assembly}.samples.file"
+    log:
+        std=log_dir_path / "{assembly}.samples_file.log",
+        cluster_log=cluster_log_dir_path / "{assembly}.samples_file.cluster.log",
+        cluster_err=cluster_log_dir_path / "{assembly}.samples_file.cluster.err"
+    benchmark:
+         benchmark_dir_path / "{assembly}.samples_file.benchmark.txt"
+    conda:
+        "../../../%s" % config["conda_config"]
+    resources:
+        cpus=config["pseudoautosomal_region_threads"],
+        time=config["pseudoautosomal_region_time"],
+        mem=config["pseudoautosomal_region_mem_mb"]
+    threads:
+        config["pseudoautosomal_region_threads"]
+    shell:
+        "tail -n+2 {input} | awk '{{print $1\"\t\"$2}}' > {output} 2> {log.std} "

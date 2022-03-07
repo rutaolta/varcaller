@@ -56,6 +56,7 @@ rule all:
         # coverage visualization
         expand(out_alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE),
 
-        # ploidy.file
-        expand(varcall_dir_path / "{assembly}.ploidy.file", assembly=ASSEMBLY)
+        # ploidy.file and samples.file
+        expand(varcall_dir_path / "{assembly}.ploidy.file", assembly=ASSEMBLY),
+        expand(varcall_dir_path / "{assembly}.samples.file", assembly=ASSEMBLY)
 
