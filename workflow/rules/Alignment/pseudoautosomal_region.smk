@@ -35,7 +35,7 @@ rule pseudoautosomal_region:
 rule ploidy_file:
     input:
         beds=expand(out_alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=PAR_SIZE),
-        lenfile=rules.assembly_stats.output.lenfile
+        lenfile=assembly_stats_dir_path / "{assembly}.len"
     output:
         varcall_dir_path / "ploidy.file"
     log:
