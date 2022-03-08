@@ -1,6 +1,6 @@
 rule pseudoautosomal_region:
     input:
-        whole_stats=rules.coverage_whole_genome_stats.output, #alignment_dir_path / "{sample}/{assembly}.{sample}.coverage_whole_genome_stats.csv",
+        whole_stats=rules.coverage_whole_genome_stats.output, 
         window_stats=alignment_dir_path / ("{sample}/{assembly}.{sample}.coverage_{par_size}_windows_stats.csv")
     output:
         bed=alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed",
@@ -34,7 +34,7 @@ rule pseudoautosomal_region:
 
 rule ploidy_file:
     input:
-        beds=expand(alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", zip, assembly=ASSEMBLY, sample=SAMPLES.sample_id, par_size=PAR_SIZE),
+        beds=expand(alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed", assembly=ASSEMBLY, sample=SAMPLES[SAMPLES["sex"]=='M'].sample_id, par_size=PAR_SIZE),
         lenfile=assembly_stats_dir_path / "{assembly}.len"
     output:
         assembly_stats_dir_path / "{assembly}.ploidy.file"
