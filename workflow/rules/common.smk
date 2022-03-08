@@ -70,13 +70,10 @@ def aggregate_file_names(pattern, **wildcards):
 
 rule create_sample_cluster_log_dirs:
     output:
-        directory(expand(cluster_log_dir_path / "{sample}", sample=SAMPLES.sample_id))
+        samples=directory(expand(cluster_log_dir_path / "{sample}", sample=SAMPLES.sample_id)),
+        assembly=directory(cluster_log_dir_path / ASSEMBLY)
     shell:
-        "mkdir -p {output}"
+        "mkdir -p {output.samples}; "
+        "mkdir -p {output.assembly}; "
 
 
-# rule create_subset_out_dirs:
-#     output:
-#         directory(expand(vcf_subset_dir_path / "{sample}", sample=SAMPLES.sample_id))
-#     shell:
-#         "mkdir -p {output}; "

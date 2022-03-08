@@ -18,7 +18,7 @@ rule samtools_faidx:
     threads:
         config["samtools_faidx_threads"]
     shell:
-        "samtools faidx {input.assembly} ;"
+        "samtools faidx {input.assembly}; "
         "mv {input.assembly}.fai {output} "
 
 
