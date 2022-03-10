@@ -82,7 +82,7 @@ draw_variant_window_densities_time: "5:00:00"
 
 #---- Memory ----
 # suppl
-bwa_map_per_thread_mem_mb: 1
+bwa_map_per_thread_mem_mb: 10
 # rules
 bwa_index_mem_mb: 30000
 bwa_mem_mem_mb: 50000
