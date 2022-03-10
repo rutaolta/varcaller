@@ -32,6 +32,7 @@ bcftools_filter_soft_filter: "LowQual"
 bcftools_filter_exclude: "QUAL < 20.0 || (FORMAT/SP > 60.0 | FORMAT/DP < 5.0 | FORMAT/GQ < 20.0)"
 bcftools_filter_variance_type: 'TYPE="{var_type}"'
 bcftools_filter_zygosity_type: 'FMT/GT="{zygosity}"'
+ploidy_of_ChrX: False
 # visualization
 number_of_chromosomes: 17
 coverage_stats_window_size_list: [1000, 10000]
@@ -81,7 +82,7 @@ draw_variant_window_densities_time: "5:00:00"
 
 #---- Memory ----
 # suppl
-bwa_map_per_thread_mem_mb: 10
+bwa_map_per_thread_mem_mb: 1
 # rules
 bwa_index_mem_mb: 30000
 bwa_mem_mem_mb: 50000

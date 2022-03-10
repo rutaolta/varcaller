@@ -34,8 +34,7 @@ include: "workflow/rules/Preprocessing/assembly_stats.smk"
 
 
 ##### target rules #####
-localrules: all, create_sample_cluster_log_dirs #, create_subset_out_dirs
-# ruleorder: create_sample_cluster_log_dirs > create_subset_out_dirs > bcftools_vcf_subset
+localrules: all, create_sample_cluster_log_dirs
 ruleorder: create_sample_cluster_log_dirs > bcftools_vcf_subset
 
 rule all:
@@ -47,11 +46,11 @@ rule all:
         expand(alignment_dir_path / "{sample}/{assembly}.{sample}.sorted.mkdup.bam.bai", assembly=ASSEMBLY, sample=SAMPLES.sample_id),
 
         # variant calling
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.vcf.gz"), assembly=ASSEMBLY, var_type=VAR_TYPE),
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.vcf.gz"), assembly=ASSEMBLY, var_type=VAR_TYPE, zygosity=ZYGOSITY),
+        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{ploidy}.{var_type}.vcf.gz"), assembly=ASSEMBLY, ploidy=PLOIDY, var_type=VAR_TYPE),
+        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{ploidy}.{var_type}.{zygosity}.vcf.gz"), assembly=ASSEMBLY, ploidy=PLOIDY, var_type=VAR_TYPE, zygosity=ZYGOSITY),
 
         # draw densities
-        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{var_type}.{zygosity}.{size_and_step}.jet.png"), assembly=ASSEMBLY, var_type=VAR_TYPE, zygosity=ZYGOSITY, size_and_step=SIZE_AND_STEP),
+        lambda wildcards: aggregate_file_names(str(vcf_subset_dir_path / "{subset}/{assembly}.{ploidy}.{var_type}.{zygosity}.{size_and_step}.jet.png"), assembly=ASSEMBLY, ploidy=PLOIDY, var_type=VAR_TYPE, zygosity=ZYGOSITY, size_and_step=SIZE_AND_STEP),
 
         # coverage visualization
         expand(alignment_dir_path / "{sample}/{assembly}.{sample}.{size}.track.jet.png", assembly=ASSEMBLY, sample=SAMPLES.sample_id, size=SIZE),

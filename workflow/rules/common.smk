@@ -41,8 +41,13 @@ VAR_TYPE=['snp','indel']
 # zygosity
 ZYGOSITY=['het','hom']
 
+# ploidy of sex chromosome {True|False}
+ploidy_of_ChrX=bool(config["ploidy_of_ChrX"])
+# marker suffix: haploidy = with PAR coordinates; diploidy = without
+PLOIDY="haploidy" if ploidy_of_ChrX else "diploidy"
+
 # pattern for files after checkpoint bcftools_vcf_subset
-PATTERN_SUBSET_VCF=str("{subset}/"+ASSEMBLY+".vcf.gz")
+PATTERN_SUBSET_VCF=str("{subset}/"+ASSEMBLY+"."+PLOIDY+".vcf.gz")
 
 
 # def get_fasta(wildcards):

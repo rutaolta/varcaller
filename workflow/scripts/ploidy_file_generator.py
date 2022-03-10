@@ -43,8 +43,8 @@ def main():
     with open(args.output, 'a') as ploidy_outfile:
         ploidy_outfile.write(f"{chr_name}\t1\t{start_coordinate}\tM\t1\n")
         ploidy_outfile.write(f"{chr_name}\t{stop_coordinate}\t{sex_chromosome_length}\tM\t1\n")
-        ploidy_outfile.write("*\t*\t*\tM\t2\n")
-        ploidy_outfile.write("*\t*\t*\tF\t2\n")
+        # ploidy_outfile.write("*\t*\t*\tM\t2\n")
+        # ploidy_outfile.write("*\t*\t*\tF\t2\n")
 
 
 if __name__ == "__main__":
