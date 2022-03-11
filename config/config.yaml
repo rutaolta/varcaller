@@ -45,24 +45,24 @@ syn_file_key_column: "0"
 syn_file_value_column: "1"
 
 #---- Threads ----
-bwa_index_threads: 4
+bwa_index_threads: 16
 bwa_map_threads: 30
 bwa_mem_threads: 10
 samtools_fixmate_threads: 6
 samtools_sort_threads: 10
 samtools_markdup_threads: 6
-samtools_faidx_threads: 2
+samtools_faidx_threads: 8
 index_bam_threads: 8
 mosdepth_threads: 16
-coverage_stats_threads: 1
+coverage_stats_threads: 8
 coverage_visualization_threads: 4
-pseudoautosomal_region_threads: 1
+pseudoautosomal_region_threads: 4
 bcftools_varcall_threads: 32
-bcftools_filter_threads: 10
-bcftools_vcf_subset_threads: 10
-bcftools_filter_indel_snp_threads: 10
-bcftools_filter_hetero_homo_threads: 10
-draw_variant_window_densities_threads: 2
+bcftools_filter_threads: 16
+bcftools_vcf_subset_threads: 16
+bcftools_filter_indel_snp_threads: 16
+bcftools_filter_hetero_homo_threads: 16
+draw_variant_window_densities_threads: 4
 
 #---- Time ----
 samtools_faidx_time: "10:00:00"
@@ -84,7 +84,7 @@ draw_variant_window_densities_time: "5:00:00"
 # suppl
 bwa_map_per_thread_mem_mb: 10
 # rules
-bwa_index_mem_mb: 30000
+bwa_index_mem_mb: 50000
 bwa_mem_mem_mb: 50000
 samtools_fixmate_mem_mb: 20000
 samtools_markdup_mem_mb: 20000
