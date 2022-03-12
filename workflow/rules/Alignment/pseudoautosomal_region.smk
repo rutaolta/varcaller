@@ -6,7 +6,7 @@ rule pseudoautosomal_region:
         bed=alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_pseudoreg.bed",
         chrscaf=temp(alignment_dir_path / "{sample}/PAR/{assembly}.{sample}.{par_size}_chrscaf.csv")
     params:
-        outdir=alignment_dir_path / "{sample}/PAR",
+        outdir=lambda w: alignment_dir_path / ("{sample}/PAR").format(sample=w.sample),
         prefix=lambda w: alignment_dir_path / ("{sample}/PAR/{assembly}.{sample}.{par_size}").format(assembly=w.assembly, sample=w.sample, par_size=PAR_SIZE),
         scaffold_name=config["sex_scaffold_name"],
         par_window_size=PAR_SIZE
